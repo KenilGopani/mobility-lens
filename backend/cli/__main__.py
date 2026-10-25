@@ -76,16 +76,33 @@ def seed_scoring_model() -> None:
 @app.command("fetch-boundary")
 def fetch_boundary_command(
     slug: Annotated[str, typer.Argument(help="Service-area slug, e.g. foster-city.")],
-    query: Annotated[str, typer.Argument(help='OSM geocoding query, e.g. "Foster City, CA, USA".')],
+    query: Annotated[
+        str,
+        typer.Argument(help='Place name ("Foster City") for census; geocoding query for osm.'),
+    ],
+    source: Annotated[
+        str, typer.Option(help="census (land-clipped, default) or osm (may include water).")
+    ] = "census",
+    state_fips: Annotated[str, typer.Option(help="Census state FIPS (06 = California).")] = "06",
+    geoid: Annotated[
+        str | None, typer.Option(help="Census GEOID to disambiguate same-named places.")
+    ] = None,
     out_dir: Annotated[
         Path, typer.Option(help="Directory to write <slug>.geojson into.")
     ] = seed.BOUNDARY_DIR,
 ) -> None:
-    """Geocode a boundary via OSM and write data/boundaries/<slug>.geojson (EPSG:4326)."""
+    """Fetch a boundary and write data/boundaries/<slug>.geojson (EPSG:4326)."""
     from pipelines.boundaries import write_boundary
 
     configure_logging(get_settings().log_level)
-    path = write_boundary(slug, query, out_dir=out_dir)
+    path = write_boundary(
+        slug,
+        query,
+        out_dir=out_dir,
+        source=source,
+        state_fips=state_fips,
+        geoid=geoid,
+    )
     typer.echo(f"wrote {path}")
 
 
@@ -115,6 +132,9 @@ def analyze_area_command(
     )
     for key, value in summary.area_metrics.items():
         typer.echo(f"  {key}: {'unavailable' if value is None else f'{value:.4f}'}")
+    score = "unavailable" if summary.score is None else f"{summary.score:.1f}"
+    confidence = summary.score_confidence or 0.0
+    typer.echo(f"  score: {score} (confidence {confidence:.2f}), findings: {summary.findings}")
 
 
 if __name__ == "__main__":

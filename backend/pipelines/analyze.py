@@ -1,8 +1,9 @@
 """Orchestrates the analysis of one service area (docs/architecture.md, pipeline stages).
 
-Stages: boundary -> network -> cells -> metrics -> normalize (hook) -> persist -> quality (hook).
-Normalization and data-quality evaluation are injected callables defaulting to no-ops; the CLI
-wires the real ones once app/scoring and app/quality exist.
+Stages: boundary -> network -> cells -> metrics -> normalize (hook) -> persist -> quality (hook)
+-> score. Normalization and quality evaluation are injectable callables; when omitted, the real
+implementations (pipelines/hooks.py: DB metric definitions, app.quality rules) are used. The
+no-op hooks remain available for tests.
 """
 
 import uuid
@@ -18,12 +19,19 @@ from sqlalchemy.orm import Session
 
 from app.core.config import get_settings
 from app.models import AnalysisRun
+from app.quality.rules import QualityConfig
 from app.repositories import analysis_runs, quality_findings, service_areas
 from app.repositories.inputs import (
     AreaMetricInput,
     CellMetricInput,
     H3CellInput,
     RunCellInput,
+)
+from pipelines.hooks import (
+    make_db_normalizer,
+    make_quality_evaluator,
+    quality_config_parameters,
+    score_and_store,
 )
 from pipelines.metrics import (
     METRIC_KEYS,
@@ -81,7 +89,7 @@ class AnalysisContext:
     area_metrics: list[AreaMetricInput]
 
 
-# HOOKS. Defaults are explicit no-ops: normalized_value stays None and no findings are written.
+# HOOKS. Real defaults live in pipelines/hooks.py; these no-ops are explicit opt-outs for tests.
 Normalizer = Callable[
     [list[CellMetricInput], list[AreaMetricInput]],
     tuple[list[CellMetricInput], list[AreaMetricInput]],
@@ -113,6 +121,9 @@ class AnalysisSummary:
     edge_count: int
     area_metrics: dict[str, float | None]
     findings: int
+    score: float | None = None
+    score_confidence: float | None = None
+    score_warnings: list[str] = field(default_factory=list)
     source_metadata: dict[str, Any] = field(default_factory=dict)
 
 
@@ -132,8 +143,9 @@ def analyze_area(
     *,
     network_provider: NetworkProvider = default_network_provider,
     h3_resolution: int | None = None,
-    normalizer: Normalizer = no_op_normalizer,
-    quality_evaluator: QualityEvaluator = no_op_quality_evaluator,
+    normalizer: Normalizer | None = None,
+    quality_evaluator: QualityEvaluator | None = None,
+    quality_config: QualityConfig | None = None,
 ) -> AnalysisSummary:
     """Run the pipeline for `slug`, creating a new analysis run every time.
 
@@ -150,6 +162,12 @@ def analyze_area(
         "network_type": NETWORK_TYPE,
         "simplify": True,
     }
+    if quality_evaluator is None:
+        config = quality_config or QualityConfig()
+        quality_evaluator = make_quality_evaluator(config)
+        parameters["quality_config"] = quality_config_parameters(config)
+    if normalizer is None:
+        normalizer = make_db_normalizer(session)
     run = analysis_runs.create_run(
         session,
         service_area_id=area.id,
@@ -293,6 +311,10 @@ def _run_stages(
             )
         counts.update(findings=len(findings))
 
+    with stage(log, "score") as counts:
+        _, result = score_and_store(session, run.id, area_metrics)
+        counts.update(score=result.score, confidence=round(result.confidence, 4))
+
     return AnalysisSummary(
         analysis_run_id=run.id,
         service_area_id=run.service_area_id,
@@ -302,5 +324,8 @@ def _run_stages(
         edge_count=am.edge_count,
         area_metrics={m.metric_key: m.raw_value for m in area_metrics},
         findings=len(findings),
+        score=result.score,
+        score_confidence=result.confidence,
+        score_warnings=list(result.warnings),
         source_metadata=source_metadata,
     )
