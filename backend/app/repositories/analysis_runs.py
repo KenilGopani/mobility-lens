@@ -2,8 +2,8 @@ import uuid
 from datetime import UTC, datetime
 from typing import Any
 
-from sqlalchemy import select
-from sqlalchemy.dialects.postgresql import insert
+from sqlalchemy import func, select
+from sqlalchemy.dialects.postgresql import distinct_on, insert
 from sqlalchemy.orm import Session
 
 from app.models import AnalysisRun, AnalysisRunCell, AreaMetric, CellMetric, H3Cell
@@ -122,3 +122,49 @@ def persist_results(
         if source_metadata is not None:
             run.source_metadata = source_metadata
         session.flush()
+
+
+def latest_succeeded_for_areas(
+    session: Session, service_area_ids: list[uuid.UUID]
+) -> dict[uuid.UUID, AnalysisRun]:
+    """Latest succeeded run per area in one query (same ordering as the single-area lookup)."""
+    stmt = (
+        select(AnalysisRun)
+        .where(
+            AnalysisRun.service_area_id.in_(service_area_ids),
+            AnalysisRun.status == RunStatus.SUCCEEDED.value,
+        )
+        .ext(distinct_on(AnalysisRun.service_area_id))
+        .order_by(
+            AnalysisRun.service_area_id,
+            AnalysisRun.completed_at.desc().nulls_last(),
+            AnalysisRun.started_at.desc(),
+            AnalysisRun.id,
+        )
+    )
+    return {r.service_area_id: r for r in session.scalars(stmt)}
+
+
+def list_runs(
+    session: Session,
+    *,
+    service_area_id: uuid.UUID | None,
+    status: str | None,
+    limit: int,
+    offset: int,
+) -> tuple[list[AnalysisRun], int]:
+    """Runs newest first (started_at desc, id), plus the total matching count."""
+    conds = []
+    if service_area_id is not None:
+        conds.append(AnalysisRun.service_area_id == service_area_id)
+    if status is not None:
+        conds.append(AnalysisRun.status == status)
+    total = session.scalar(select(func.count()).select_from(AnalysisRun).where(*conds)) or 0
+    stmt = (
+        select(AnalysisRun)
+        .where(*conds)
+        .order_by(AnalysisRun.started_at.desc(), AnalysisRun.id)
+        .limit(limit)
+        .offset(offset)
+    )
+    return list(session.scalars(stmt)), total
