@@ -14,6 +14,8 @@ Network: OSMnx `network_type="drive"`, simplified, as an undirected view for deg
 | `network_directness` | `1 / circuity_avg`, where circuity = edge length / straight-line distance between its endpoints, length-weighted | ratio (0,1] | higher better |
 | `metadata_completeness` | Mean over tags {`maxspeed`, `lanes`, `name`} of the fraction of drivable edges having that tag | fraction | higher better |
 
+**Boundaries are land-clipped.** Service-area boundaries are US Census cartographic boundary polygons (`cb_2023_06_place_500k`), which are clipped to the shoreline. OSM/Nominatim municipal polygons can include adjacent water (Foster City's covers San Francisco Bay: 49.76 km2 vs about 11 km2 of land), which dilutes every per-km2 metric and fills the grid with open-water cells. This supersedes the earlier assumption that boundaries come from OSM; see ADR-004. The boundary `source` records provenance, e.g. `census-cb-2023:0625338`.
+
 "Region" is an H3 cell clipped to the service-area boundary for cell metrics, and the whole boundary for area metrics. Area metrics are computed directly on the whole area (area-weighted), **not** as a mean of cell values.
 
 `metadata_completeness` is a tag-presence statistic. It is not geographic coverage and must not be labeled as such.

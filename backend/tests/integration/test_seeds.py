@@ -87,3 +87,17 @@ def test_seed_service_areas_rejects_multi_feature(session: Session, tmp_path: Pa
     (tmp_path / "foster-city.geojson").write_text(json.dumps(doc))
     with pytest.raises(ValueError, match="exactly one"):
         seed.seed_service_areas(session, tmp_path)
+
+
+def test_seed_service_areas_records_geojson_source(session: Session, tmp_path: Path) -> None:
+    feature = {
+        "type": "Feature",
+        "properties": {"source": "census-cb-2023:0625338"},
+        "geometry": square_geojson(-122.3, 37.5),
+    }
+    (tmp_path / "foster-city.geojson").write_text(json.dumps(feature))
+    (tmp_path / "san-jose.geojson").write_text(json.dumps(square_geojson(-121.9, 37.3)))
+    seed.seed_service_areas(session, tmp_path)
+    rows = {a.slug: a.source for a in session.scalars(select(ServiceArea))}
+    assert rows["foster-city"] == "census-cb-2023:0625338"
+    assert rows["san-jose"] == "file:data/boundaries/san-jose.geojson"

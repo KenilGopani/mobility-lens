@@ -26,7 +26,7 @@ service_areas
   name VARCHAR NOT NULL
   slug VARCHAR UNIQUE NOT NULL
   boundary GEOMETRY(MULTIPOLYGON, 4326) NOT NULL
-  source VARCHAR NOT NULL                -- e.g. "osm-nominatim:<osm_id>"
+  source VARCHAR NOT NULL                -- e.g. "census-cb-2023:<GEOID>" (default) or "osm-nominatim:<osm_id>"
   created_at, updated_at TIMESTAMPTZ
 
 analysis_runs

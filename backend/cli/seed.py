@@ -90,20 +90,28 @@ def seed_service_areas(session: Session, boundary_dir: Path = BOUNDARY_DIR) -> S
         if not path.is_file():
             report.missing.append(slug)
             continue
-        geojson = _read_geometry(path)
+        geojson, source = _read_boundary(path)
         _, created = service_areas.upsert_by_slug(
             session,
             name=name,
             slug=slug,
             boundary_geojson=geojson,
-            source=f"file:data/boundaries/{path.name}",
+            source=source or f"file:data/boundaries/{path.name}",
         )
         (report.created if created else report.updated).append(slug)
     return report
 
 
 def _read_geometry(path: Path) -> dict[str, Any]:
-    """Accept a bare geometry, a Feature, or a single-feature FeatureCollection."""
+    return _read_boundary(path)[0]
+
+
+def _read_boundary(path: Path) -> tuple[dict[str, Any], str | None]:
+    """Accept a bare geometry, a Feature, or a single-feature FeatureCollection.
+
+    Returns (geometry, provenance); provenance is `properties.source` when present.
+    """
+    source: str | None = None
     doc = json.loads(path.read_text())
     if doc.get("type") == "FeatureCollection":
         features = doc.get("features", [])
@@ -111,11 +119,13 @@ def _read_geometry(path: Path) -> dict[str, Any]:
             raise ValueError(f"{path.name}: expected exactly one feature, got {len(features)}")
         doc = features[0]
     if doc.get("type") == "Feature":
+        prop = (doc.get("properties") or {}).get("source")
+        source = str(prop) if prop else None
         doc = doc["geometry"]
     if doc.get("type") not in {"Polygon", "MultiPolygon"}:
         raise ValueError(f"{path.name}: boundary must be a Polygon or MultiPolygon")
     geometry: dict[str, Any] = doc
-    return geometry
+    return geometry, source
 
 
 def seed_metric_definitions(session: Session) -> SeedReport:
