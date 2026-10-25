@@ -1,0 +1,64 @@
+[project]
+name = "mobility-lens-backend"
+version = "0.1.0"
+description = "MobilityLens backend: FastAPI read API, Typer CLI, analysis pipelines"
+requires-python = ">=3.12,<3.13"
+dependencies = [
+    "fastapi",
+    "uvicorn",
+    "pydantic>=2",
+    "pydantic-settings",
+    "sqlalchemy>=2",
+    "alembic",
+    "psycopg[binary]",
+    "geoalchemy2",
+    "typer",
+    "structlog",
+]
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-asyncio",
+    "pytest-cov",
+    "httpx",
+    "ruff",
+    "mypy",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP", "SIM", "C4", "RUF"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["app", "cli"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+plugins = ["pydantic.mypy"]
+exclude = ["migrations/"]
+
+[[tool.mypy.overrides]]
+module = ["geoalchemy2.*"]
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+asyncio_mode = "auto"
+addopts = "-m 'not live_data' --cov=app --cov=cli --cov-report=term-missing"
+markers = [
+    "integration: needs a running PostGIS database (DATABASE_URL)",
+    "live_data: hits live external data sources (excluded by default)",
+]
+
+[tool.coverage.run]
+branch = true
