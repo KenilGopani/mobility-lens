@@ -14,6 +14,12 @@ dependencies = [
     "geoalchemy2",
     "typer",
     "structlog",
+    "geopandas>=1.2.0",
+    "shapely>=2.2.0",
+    "osmnx>=2.1.1",
+    "h3>=4.5.0",
+    "pandas>=3.1.0",
+    "numpy>=2.5.4",
 ]
 
 [dependency-groups]
@@ -41,7 +47,7 @@ select = ["E", "F", "W", "I", "B", "UP", "SIM", "C4", "RUF"]
 "migrations/versions/*" = ["E501"]
 
 [tool.ruff.lint.isort]
-known-first-party = ["app", "cli"]
+known-first-party = ["app", "cli", "pipelines"]
 
 [tool.mypy]
 python_version = "3.12"
@@ -50,14 +56,14 @@ plugins = ["pydantic.mypy"]
 exclude = ["migrations/"]
 
 [[tool.mypy.overrides]]
-module = ["geoalchemy2.*"]
+module = ["geoalchemy2.*", "geopandas.*", "osmnx.*", "h3.*", "shapely.*", "pyproj.*", "networkx.*", "pandas.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]
 asyncio_mode = "auto"
-addopts = "-m 'not live_data' --cov=app --cov=cli --cov-report=term-missing"
+addopts = "-m 'not live_data' --cov=app --cov=cli --cov=pipelines --cov-report=term-missing"
 markers = [
     "integration: needs a running PostGIS database (DATABASE_URL)",
     "live_data: hits live external data sources (excluded by default)",

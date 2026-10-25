@@ -12,6 +12,7 @@ import typer
 from sqlalchemy.orm import Session
 
 from app.core.config import get_settings
+from app.core.logging import configure_logging
 from app.db.session import make_engine
 from cli import seed
 
@@ -70,6 +71,50 @@ def seed_scoring_model() -> None:
     with _session() as session, session.begin():
         report = seed.seed_scoring_model(session)
     typer.echo(f"scoring model baseline:v1: {'created' if report.created else 'updated'}")
+
+
+@app.command("fetch-boundary")
+def fetch_boundary_command(
+    slug: Annotated[str, typer.Argument(help="Service-area slug, e.g. foster-city.")],
+    query: Annotated[str, typer.Argument(help='OSM geocoding query, e.g. "Foster City, CA, USA".')],
+    out_dir: Annotated[
+        Path, typer.Option(help="Directory to write <slug>.geojson into.")
+    ] = seed.BOUNDARY_DIR,
+) -> None:
+    """Geocode a boundary via OSM and write data/boundaries/<slug>.geojson (EPSG:4326)."""
+    from pipelines.boundaries import write_boundary
+
+    configure_logging(get_settings().log_level)
+    path = write_boundary(slug, query, out_dir=out_dir)
+    typer.echo(f"wrote {path}")
+
+
+@app.command("analyze-area")
+def analyze_area_command(
+    slug: Annotated[str, typer.Argument(help="Service-area slug (must be seeded).")],
+    h3_resolution: Annotated[
+        int | None, typer.Option(help="H3 resolution (default: H3_RESOLUTION setting).")
+    ] = None,
+) -> None:
+    """Run the geospatial pipeline for one service area and persist a new analysis run."""
+    from pipelines.analyze import AreaNotFoundError, analyze_area
+
+    settings = get_settings()
+    configure_logging(settings.log_level)
+    with _session() as session:
+        try:
+            summary = analyze_area(session, slug, h3_resolution=h3_resolution)
+        except AreaNotFoundError as exc:
+            typer.echo(str(exc), err=True)
+            raise typer.Exit(code=2) from exc
+        except Exception as exc:
+            typer.echo(f"analysis of {slug!r} failed (run recorded as failed): {exc}", err=True)
+            raise typer.Exit(code=1) from exc
+    typer.echo(
+        f"run {summary.analysis_run_id}: {summary.cell_count} cells, {summary.area_km2:.2f} km2"
+    )
+    for key, value in summary.area_metrics.items():
+        typer.echo(f"  {key}: {'unavailable' if value is None else f'{value:.4f}'}")
 
 
 if __name__ == "__main__":

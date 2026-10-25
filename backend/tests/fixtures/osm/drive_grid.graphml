@@ -1,0 +1,715 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="d10" for="edge" attr.name="lanes" attr.type="string" />
+  <key id="d9" for="edge" attr.name="maxspeed" attr.type="string" />
+  <key id="d8" for="edge" attr.name="name" attr.type="string" />
+  <key id="d7" for="edge" attr.name="oneway" attr.type="string" />
+  <key id="d6" for="edge" attr.name="length" attr.type="string" />
+  <key id="d5" for="edge" attr.name="highway" attr.type="string" />
+  <key id="d4" for="edge" attr.name="osmid" attr.type="string" />
+  <key id="d3" for="node" attr.name="street_count" attr.type="string" />
+  <key id="d2" for="node" attr.name="y" attr.type="string" />
+  <key id="d1" for="node" attr.name="x" attr.type="string" />
+  <key id="d0" for="graph" attr.name="crs" attr.type="string" />
+  <graph edgedefault="directed">
+    <node id="100">
+      <data key="d1">-122.27</data>
+      <data key="d2">37.55</data>
+      <data key="d3">2</data>
+    </node>
+    <node id="101">
+      <data key="d1">-122.26886694439769</data>
+      <data key="d2">37.55</data>
+      <data key="d3">3</data>
+    </node>
+    <node id="102">
+      <data key="d1">-122.26773388879538</data>
+      <data key="d2">37.55</data>
+      <data key="d3">4</data>
+    </node>
+    <node id="103">
+      <data key="d1">-122.26660083319308</data>
+      <data key="d2">37.55</data>
+      <data key="d3">3</data>
+    </node>
+    <node id="104">
+      <data key="d1">-122.26546777759077</data>
+      <data key="d2">37.55</data>
+      <data key="d3">2</data>
+    </node>
+    <node id="105">
+      <data key="d1">-122.27</data>
+      <data key="d2">37.55089831117499</data>
+      <data key="d3">3</data>
+    </node>
+    <node id="106">
+      <data key="d1">-122.26886694439769</data>
+      <data key="d2">37.55089831117499</data>
+      <data key="d3">4</data>
+    </node>
+    <node id="107">
+      <data key="d1">-122.26773388879538</data>
+      <data key="d2">37.55089831117499</data>
+      <data key="d3">4</data>
+    </node>
+    <node id="108">
+      <data key="d1">-122.26660083319308</data>
+      <data key="d2">37.55089831117499</data>
+      <data key="d3">4</data>
+    </node>
+    <node id="109">
+      <data key="d1">-122.26546777759077</data>
+      <data key="d2">37.55089831117499</data>
+      <data key="d3">3</data>
+    </node>
+    <node id="110">
+      <data key="d1">-122.27</data>
+      <data key="d2">37.55179662234998</data>
+      <data key="d3">3</data>
+    </node>
+    <node id="111">
+      <data key="d1">-122.26886694439769</data>
+      <data key="d2">37.55179662234998</data>
+      <data key="d3">4</data>
+    </node>
+    <node id="112">
+      <data key="d1">-122.26773388879538</data>
+      <data key="d2">37.55179662234998</data>
+      <data key="d3">4</data>
+    </node>
+    <node id="113">
+      <data key="d1">-122.26660083319308</data>
+      <data key="d2">37.55179662234998</data>
+      <data key="d3">4</data>
+    </node>
+    <node id="114">
+      <data key="d1">-122.26546777759077</data>
+      <data key="d2">37.55179662234998</data>
+      <data key="d3">3</data>
+    </node>
+    <node id="115">
+      <data key="d1">-122.27</data>
+      <data key="d2">37.55269493352497</data>
+      <data key="d3">3</data>
+    </node>
+    <node id="116">
+      <data key="d1">-122.26886694439769</data>
+      <data key="d2">37.55269493352497</data>
+      <data key="d3">4</data>
+    </node>
+    <node id="117">
+      <data key="d1">-122.26773388879538</data>
+      <data key="d2">37.55269493352497</data>
+      <data key="d3">4</data>
+    </node>
+    <node id="118">
+      <data key="d1">-122.26660083319308</data>
+      <data key="d2">37.55269493352497</data>
+      <data key="d3">4</data>
+    </node>
+    <node id="119">
+      <data key="d1">-122.26546777759077</data>
+      <data key="d2">37.55269493352497</data>
+      <data key="d3">3</data>
+    </node>
+    <node id="120">
+      <data key="d1">-122.27</data>
+      <data key="d2">37.55359324469996</data>
+      <data key="d3">2</data>
+    </node>
+    <node id="121">
+      <data key="d1">-122.26886694439769</data>
+      <data key="d2">37.55359324469996</data>
+      <data key="d3">3</data>
+    </node>
+    <node id="122">
+      <data key="d1">-122.26773388879538</data>
+      <data key="d2">37.55359324469996</data>
+      <data key="d3">3</data>
+    </node>
+    <node id="123">
+      <data key="d1">-122.26660083319308</data>
+      <data key="d2">37.55359324469996</data>
+      <data key="d3">3</data>
+    </node>
+    <node id="124">
+      <data key="d1">-122.26546777759077</data>
+      <data key="d2">37.55359324469996</data>
+      <data key="d3">2</data>
+    </node>
+    <node id="200">
+      <data key="d1">-122.26773388879538</data>
+      <data key="d2">37.5495508444125</data>
+      <data key="d3">1</data>
+    </node>
+    <edge source="100" target="101" id="0">
+      <data key="d4">100101</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 0 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="100" target="105" id="0">
+      <data key="d4">100105</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 0 Avenue</data>
+    </edge>
+    <edge source="101" target="100" id="0">
+      <data key="d4">100101</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 0 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="101" target="102" id="0">
+      <data key="d4">101102</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 0 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="101" target="106" id="0">
+      <data key="d4">101106</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="102" target="101" id="0">
+      <data key="d4">101102</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 0 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="102" target="103" id="0">
+      <data key="d4">102103</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 0 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="102" target="107" id="0">
+      <data key="d4">102107</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 2 Avenue</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="102" target="200" id="0">
+      <data key="d4">999</data>
+      <data key="d5">service</data>
+      <data key="d6">50.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="103" target="102" id="0">
+      <data key="d4">102103</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 0 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="103" target="104" id="0">
+      <data key="d4">103104</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 0 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="103" target="108" id="0">
+      <data key="d4">103108</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="104" target="103" id="0">
+      <data key="d4">103104</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 0 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="104" target="109" id="0">
+      <data key="d4">104109</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 4 Avenue</data>
+    </edge>
+    <edge source="105" target="100" id="0">
+      <data key="d4">100105</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 0 Avenue</data>
+    </edge>
+    <edge source="105" target="106" id="0">
+      <data key="d4">105106</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 1 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="105" target="110" id="0">
+      <data key="d4">105110</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 0 Avenue</data>
+    </edge>
+    <edge source="106" target="101" id="0">
+      <data key="d4">101106</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="106" target="105" id="0">
+      <data key="d4">105106</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 1 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="106" target="107" id="0">
+      <data key="d4">106107</data>
+      <data key="d5">residential</data>
+      <data key="d6">150.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 1 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="106" target="111" id="0">
+      <data key="d4">106111</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="107" target="102" id="0">
+      <data key="d4">102107</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 2 Avenue</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="107" target="106" id="0">
+      <data key="d4">106107</data>
+      <data key="d5">residential</data>
+      <data key="d6">150.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 1 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="107" target="108" id="0">
+      <data key="d4">107108</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 1 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="107" target="112" id="0">
+      <data key="d4">107112</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 2 Avenue</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="108" target="103" id="0">
+      <data key="d4">103108</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="108" target="107" id="0">
+      <data key="d4">107108</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 1 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="108" target="109" id="0">
+      <data key="d4">108109</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 1 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="108" target="113" id="0">
+      <data key="d4">108113</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="109" target="104" id="0">
+      <data key="d4">104109</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 4 Avenue</data>
+    </edge>
+    <edge source="109" target="108" id="0">
+      <data key="d4">108109</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 1 Street</data>
+      <data key="d9">25 mph</data>
+    </edge>
+    <edge source="109" target="114" id="0">
+      <data key="d4">109114</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 4 Avenue</data>
+    </edge>
+    <edge source="110" target="105" id="0">
+      <data key="d4">105110</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 0 Avenue</data>
+    </edge>
+    <edge source="110" target="111" id="0">
+      <data key="d4">110111</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 2 Street</data>
+      <data key="d9">25 mph</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="110" target="115" id="0">
+      <data key="d4">110115</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 0 Avenue</data>
+    </edge>
+    <edge source="111" target="106" id="0">
+      <data key="d4">106111</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="111" target="110" id="0">
+      <data key="d4">110111</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 2 Street</data>
+      <data key="d9">25 mph</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="111" target="112" id="0">
+      <data key="d4">111112</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 2 Street</data>
+      <data key="d9">25 mph</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="111" target="116" id="0">
+      <data key="d4">111116</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="112" target="107" id="0">
+      <data key="d4">107112</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 2 Avenue</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="112" target="111" id="0">
+      <data key="d4">111112</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 2 Street</data>
+      <data key="d9">25 mph</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="112" target="113" id="0">
+      <data key="d4">112113</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 2 Street</data>
+      <data key="d9">25 mph</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="112" target="117" id="0">
+      <data key="d4">112117</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 2 Avenue</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="113" target="108" id="0">
+      <data key="d4">108113</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="113" target="112" id="0">
+      <data key="d4">112113</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 2 Street</data>
+      <data key="d9">25 mph</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="113" target="114" id="0">
+      <data key="d4">113114</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 2 Street</data>
+      <data key="d9">25 mph</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="113" target="118" id="0">
+      <data key="d4">113118</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="114" target="109" id="0">
+      <data key="d4">109114</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 4 Avenue</data>
+    </edge>
+    <edge source="114" target="113" id="0">
+      <data key="d4">113114</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 2 Street</data>
+      <data key="d9">25 mph</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="114" target="119" id="0">
+      <data key="d4">114119</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 4 Avenue</data>
+    </edge>
+    <edge source="115" target="110" id="0">
+      <data key="d4">110115</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 0 Avenue</data>
+    </edge>
+    <edge source="115" target="116" id="0">
+      <data key="d4">115116</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 3 Street</data>
+    </edge>
+    <edge source="115" target="120" id="0">
+      <data key="d4">115120</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 0 Avenue</data>
+    </edge>
+    <edge source="116" target="111" id="0">
+      <data key="d4">111116</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="116" target="115" id="0">
+      <data key="d4">115116</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 3 Street</data>
+    </edge>
+    <edge source="116" target="117" id="0">
+      <data key="d4">116117</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 3 Street</data>
+    </edge>
+    <edge source="116" target="121" id="0">
+      <data key="d4">116121</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="117" target="112" id="0">
+      <data key="d4">112117</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 2 Avenue</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="117" target="116" id="0">
+      <data key="d4">116117</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 3 Street</data>
+    </edge>
+    <edge source="117" target="118" id="0">
+      <data key="d4">117118</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 3 Street</data>
+    </edge>
+    <edge source="117" target="122" id="0">
+      <data key="d4">117122</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 2 Avenue</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="118" target="113" id="0">
+      <data key="d4">113118</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="118" target="117" id="0">
+      <data key="d4">117118</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 3 Street</data>
+    </edge>
+    <edge source="118" target="119" id="0">
+      <data key="d4">118119</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 3 Street</data>
+    </edge>
+    <edge source="118" target="123" id="0">
+      <data key="d4">118123</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="119" target="114" id="0">
+      <data key="d4">114119</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 4 Avenue</data>
+    </edge>
+    <edge source="119" target="118" id="0">
+      <data key="d4">118119</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Row 3 Street</data>
+    </edge>
+    <edge source="119" target="124" id="0">
+      <data key="d4">119124</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 4 Avenue</data>
+    </edge>
+    <edge source="120" target="115" id="0">
+      <data key="d4">115120</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 0 Avenue</data>
+    </edge>
+    <edge source="120" target="121" id="0">
+      <data key="d4">120121</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">True</data>
+      <data key="d8">Row 4 Street</data>
+    </edge>
+    <edge source="121" target="116" id="0">
+      <data key="d4">116121</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="121" target="122" id="0">
+      <data key="d4">121122</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">True</data>
+      <data key="d8">Row 4 Street</data>
+    </edge>
+    <edge source="122" target="117" id="0">
+      <data key="d4">117122</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 2 Avenue</data>
+      <data key="d10">2</data>
+    </edge>
+    <edge source="122" target="123" id="0">
+      <data key="d4">122123</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">True</data>
+      <data key="d8">Row 4 Street</data>
+    </edge>
+    <edge source="123" target="118" id="0">
+      <data key="d4">118123</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <edge source="123" target="124" id="0">
+      <data key="d4">123124</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">True</data>
+      <data key="d8">Row 4 Street</data>
+    </edge>
+    <edge source="124" target="119" id="0">
+      <data key="d4">119124</data>
+      <data key="d5">residential</data>
+      <data key="d6">100.0</data>
+      <data key="d7">False</data>
+      <data key="d8">Col 4 Avenue</data>
+    </edge>
+    <edge source="200" target="102" id="0">
+      <data key="d4">999</data>
+      <data key="d5">service</data>
+      <data key="d6">50.0</data>
+      <data key="d7">False</data>
+    </edge>
+    <data key="d0">EPSG:4326</data>
+  </graph>
+</graphml>
