@@ -14,7 +14,7 @@ from sqlalchemy.orm import Session
 from app.core.config import get_settings
 from app.core.logging import configure_logging
 from app.db.session import make_engine
-from cli import seed
+from cli import openapi, seed
 
 app = typer.Typer(help="MobilityLens data and analysis commands.", no_args_is_help=True)
 
@@ -135,6 +135,17 @@ def analyze_area_command(
     score = "unavailable" if summary.score is None else f"{summary.score:.1f}"
     confidence = summary.score_confidence or 0.0
     typer.echo(f"  score: {score} (confidence {confidence:.2f}), findings: {summary.findings}")
+
+
+@app.command("export-openapi")
+def export_openapi(
+    output: Annotated[Path, typer.Option(help="Where to write the OpenAPI document.")] = (
+        openapi.OPENAPI_PATH
+    ),
+) -> None:
+    """Write the API's OpenAPI document (committed as docs/openapi.json; CI checks drift)."""
+    output.write_text(openapi.render_openapi())
+    typer.echo(f"wrote {output}")
 
 
 if __name__ == "__main__":
