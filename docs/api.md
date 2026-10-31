@@ -75,3 +75,7 @@ Triggering analysis via API, authentication, write endpoints for areas.
 - `GET /service-areas/{id}/operations?simulation_run_id=<optional UUID>` returns the requested scenario for this area, or its newest scenario. No scenario/incorrect ownership returns 404. The response is always `synthetic: true` and includes an explicit disclaimer.
 - Metrics: route count, completion fraction, intervention fraction (routes with at least one intervention), mean completed-trip duration, issue counts by severity/status and mean resolution hours over resolved issues. Null means no denominator, never zero-filled. Daily UTC series include route/completion/intervention counts and completed-trip duration.
 - Generation is CLI-only: `python -m cli simulate-area <slug> --seed 42 --routes 500`. Identical source run, seed, count and generator version reuse the existing scenario. Synthetic metrics never enter geographic scores.
+
+## Reliability diagnostics
+
+`GET /ready` returns 200 when the database is reachable and 503 otherwise. API responses include generated `X-Request-ID` and `Server-Timing` headers. Public metric, quality and analysis-run provenance omits local cache directory paths while preserving source IDs, cache keys, query parameters and timestamps.

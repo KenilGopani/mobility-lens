@@ -30,6 +30,7 @@ from app.schemas.api import (
 from app.scoring.engine import MetricInput, score_area
 from app.services import evaluation as ev
 from app.services.errors import InvalidRequestError, NotFoundError
+from app.services.provenance import public_source
 
 OVERALL_SCORE = "overall_score"
 LOW_CONFIDENCE_THRESHOLD = 0.5
@@ -199,7 +200,7 @@ def get_metrics(
         service_area_id=area.id,
         run=ev.run_ref(run),
         analyzed_at=run.completed_at,
-        source=run.source_metadata,
+        source=public_source(run.source_metadata),
         metrics=values,
     )
 
@@ -224,7 +225,7 @@ def get_quality(
         service_area_id=area.id,
         run=ev.run_ref(run),
         analyzed_at=run.completed_at,
-        source=run.source_metadata,
+        source=public_source(run.source_metadata),
         findings=findings,
         finding_counts=_counts(findings),
         completeness=Completeness(

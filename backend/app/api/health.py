@@ -2,6 +2,7 @@ from typing import Literal
 
 import structlog
 from fastapi import APIRouter, Request
+from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from sqlalchemy import text
 from sqlalchemy.exc import SQLAlchemyError
@@ -25,3 +26,15 @@ def health(request: Request) -> HealthResponse:
         log.warning("health.database_unavailable")
         database = "unavailable"
     return HealthResponse(status="ok", database=database)
+
+
+@router.get(
+    "/ready",
+    response_model=HealthResponse,
+    responses={503: {"description": "Database unavailable"}},
+)
+def readiness(request: Request) -> HealthResponse | JSONResponse:
+    result = health(request)
+    if result.database != "ok":
+        return JSONResponse(status_code=503, content=result.model_dump())
+    return result

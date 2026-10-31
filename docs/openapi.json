@@ -2628,6 +2628,27 @@
         },
         "summary": "Health"
       }
+    },
+    "/ready": {
+      "get": {
+        "operationId": "readiness_ready_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "503": {
+            "description": "Database unavailable"
+          }
+        },
+        "summary": "Readiness"
+      }
     }
   }
 }

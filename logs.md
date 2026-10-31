@@ -125,3 +125,13 @@ Phase 6 page implementation is complete. Its full live-data acceptance is **not 
 - Geographic scoring remains server-owned and unchanged; a simulation is never described as observed performance.
 - Expanded isolated CI fixtures and browser acceptance to cover the dashboard. Generated 500-event scenarios for each existing city analysis via the new CLI, using seeds 42/43/44.
 - Validation: frontend lint, strict typecheck, **16 unit tests**, production build and **6 real-API browser tests** passed (the original six flows plus operations; area/metric flows share a test).
+
+### Phase 9: Observability, recovery and measured performance
+
+- Added generated request IDs, response timing headers, structured route/status/duration logs, database readiness (503 on dependency failure), and per-stage warning/critical counts.
+- Added preview-first stale-running recovery with explicit apply and row-lock protection; recent and successful runs are excluded. Existing bounded OSM retry, transactional rollback and batch resume provide retry/recovery without adding background infrastructure.
+- Public provenance excludes workstation cache locations; source identifiers remain available and the database retains full local provenance.
+- Added repeatable `benchmark-api` with local HTTP samples and a parameterized EXPLAIN ANALYZE/BUFFERS plan. The captured viewport plan uses `ix_h3_cells_boundary`; no speculative new indexes or caches were added.
+- Measured final p95 (10 warm samples): summary 5.04 ms, comparison 3.78 ms, viewport 54.66 ms, full_area_cells 159.73 ms, synthetic_operations 22.05 ms.
+- Added `calibration-report` and reviewed all three real city outputs. Retained fixed v1 ranges/weights rather than tuning to force an outcome; no area-level clipping was observed. Corrected the written directness definition to match the existing, unchanged computation.
+- Validation: full backend **250 tests passed**, Ruff and strict MyPy passed; stale-run preview found no interrupted runs needing changes. See `docs/reliability.md`, `docs/performance.json` and `docs/calibration.md` for evidence and limitations.

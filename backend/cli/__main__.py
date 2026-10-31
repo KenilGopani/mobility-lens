@@ -185,6 +185,56 @@ def simulate_area_command(
         typer.echo(f"SYNTHETIC simulation {run.id}: seed={run.seed} routes={routes}")
 
 
+@app.command("recover-stale-runs")
+def recover_stale_runs_command(
+    older_than_hours: Annotated[int, typer.Option(min=1)] = 24,
+    apply: Annotated[
+        bool,
+        typer.Option(
+            help="Mark stale running attempts failed, after confirming their worker stopped."
+        ),
+    ] = False,
+) -> None:
+    """Preview interrupted runs; use --apply only when no process still owns those runs."""
+    from datetime import UTC, datetime, timedelta
+
+    from app.repositories import analysis_runs
+
+    cutoff = datetime.now(UTC) - timedelta(hours=older_than_hours)
+    with _session() as session, session.begin():
+        for run in analysis_runs.stale_running(session, cutoff, lock=apply):
+            typer.echo(f"{'recover' if apply else 'preview'}: {run.id}")
+            if apply:
+                analysis_runs.mark_failed(session, run, "Operator recovered an interrupted run")
+    typer.echo("Use analyze-all --resume to retry incomplete areas.")
+
+
+@app.command("calibration-report")
+def calibration_report_command(output: Path) -> None:
+    """Write a descriptive real-data reference-range review without changing assumptions."""
+    from cli.calibration import report
+
+    with _session() as session:
+        output.write_text(report(session))
+    typer.echo(f"wrote {output}")
+
+
+@app.command("benchmark-api")
+def benchmark_api_command(
+    output: Path,
+    base_url: str = "http://127.0.0.1:8000",
+    samples: Annotated[int, typer.Option(min=1, max=100)] = 10,
+) -> None:
+    """Measure local read APIs and inspect the existing spatial query plan (read-only)."""
+    import json
+
+    from cli.benchmark import benchmark
+
+    result = benchmark(base_url, samples)
+    output.write_text(json.dumps(result, indent=2))
+    typer.echo(f"wrote {output}")
+
+
 @app.command("export-openapi")
 def export_openapi(
     output: Annotated[Path, typer.Option(help="Where to write the OpenAPI document.")] = (

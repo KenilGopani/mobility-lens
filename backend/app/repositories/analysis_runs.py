@@ -168,3 +168,17 @@ def list_runs(
         .offset(offset)
     )
     return list(session.scalars(stmt)), total
+
+
+def stale_running(session: Session, before: datetime, *, lock: bool = False) -> list[AnalysisRun]:
+    stmt = (
+        select(AnalysisRun)
+        .where(
+            AnalysisRun.status == RunStatus.RUNNING.value,
+            AnalysisRun.started_at < before,
+        )
+        .order_by(AnalysisRun.started_at, AnalysisRun.id)
+    )
+    if lock:
+        stmt = stmt.with_for_update(skip_locked=True)
+    return list(session.scalars(stmt))

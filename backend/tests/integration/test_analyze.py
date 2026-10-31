@@ -273,3 +273,29 @@ def test_cli_analyze_unknown_area_exit_code(engine: Any) -> None:
 
 def test_graph_type_sanity() -> None:
     assert isinstance(load_graph_fixture(FIXTURE), nx.MultiDiGraph)
+
+
+def test_stale_recovery_excludes_successful_and_recent_attempts(
+    session: Session, seeded: str
+) -> None:
+    from datetime import UTC, datetime, timedelta
+
+    from app.repositories import analysis_runs
+
+    summary = analyze_area(session, seeded, network_provider=fixture_provider)
+    now = datetime.now(UTC)
+    stale = analysis_runs.create_run(
+        session,
+        service_area_id=summary.service_area_id,
+        pipeline_version="test",
+        parameters={},
+        started_at=now - timedelta(days=2),
+    )
+    recent = analysis_runs.create_run(
+        session, service_area_id=summary.service_area_id, pipeline_version="test", parameters={}
+    )
+    candidates = analysis_runs.stale_running(session, now - timedelta(days=1), lock=True)
+    assert [r.id for r in candidates] == [stale.id]
+    analysis_runs.mark_failed(session, stale, "Recovered interrupted run")
+    assert recent.status == "running"
+    assert session.get(AnalysisRun, summary.analysis_run_id).status == "succeeded"

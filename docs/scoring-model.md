@@ -11,7 +11,7 @@ Network: OSMnx `network_type="drive"`, simplified, as an undirected view for deg
 | `intersection_density` | Nodes with `street_count >= 3` inside the region / region land area | per km2 | higher better |
 | `road_density` | Sum of drivable edge length clipped to the region (undirected, each physical street counted once) / region area | km/km2 | higher better |
 | `avg_node_degree` | Mean `street_count` over nodes inside the region | streets/node | higher better |
-| `network_directness` | `1 / circuity_avg`, where circuity = edge length / straight-line distance between its endpoints, length-weighted | ratio (0,1] | higher better |
+| `network_directness` | Sum of clipped endpoint straight-line lengths / sum of clipped edge path lengths; excludes self-loops | ratio (0,1] | higher better |
 | `metadata_completeness` | Mean over tags {`maxspeed`, `lanes`, `name`} of the fraction of drivable edges having that tag | fraction | higher better |
 
 **Boundaries are land-clipped.** Service-area boundaries are US Census cartographic boundary polygons (`cb_2023_06_place_500k`), which are clipped to the shoreline. OSM/Nominatim municipal polygons can include adjacent water (Foster City's covers San Francisco Bay: 49.76 km2 vs about 11 km2 of land), which dilutes every per-km2 metric and fills the grid with open-water cells. This supersedes the earlier assumption that boundaries come from OSM; see ADR-004. The boundary `source` records provenance, e.g. `census-cb-2023:0625338`.
@@ -36,7 +36,7 @@ n = 1 - that value                                          otherwise
 - `raw = NULL` gives `normalized = NULL` (never 0).
 - `ref_max == ref_min` is a configuration error and is rejected at validation.
 
-Provisional reference ranges (to be calibrated against real Bay Area output in Phase 4, then frozen as `v1`):
+Fixed reference ranges retained as `v1` after the real-output review in [calibration.md](calibration.md). These are explicit portfolio assumptions, not empirically validated service-success thresholds:
 
 | Key | ref_min | ref_max |
 |---|---|---|
