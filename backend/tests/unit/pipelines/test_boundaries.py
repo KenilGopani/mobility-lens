@@ -99,7 +99,8 @@ def test_osm_source_is_recorded(tmp_path: Path) -> None:
 
 
 def test_cli_fetch_boundary_defaults_to_census() -> None:
-    out = CliRunner().invoke(app, ["fetch-boundary", "--help"]).stdout
+    result = CliRunner().invoke(app, ["fetch-boundary", "--help"])
+    out = result.stdout + result.stderr
     assert "--source" in out and "census" in out
 
 

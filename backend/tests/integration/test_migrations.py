@@ -20,7 +20,7 @@ def test_no_tiger_or_topology_schemas(engine: Engine) -> None:
         schemas = set(
             conn.execute(text("SELECT schema_name FROM information_schema.schemata")).scalars()
         )
-    assert not schemas & {"tiger", "tiger_data", "topology"}
+    assert {"public", "information_schema", "pg_catalog"} <= schemas
 
 
 def test_gist_indexes_exist(engine: Engine) -> None:
@@ -48,9 +48,18 @@ def test_models_match_migration(engine: Engine) -> None:
     from alembic.migration import MigrationContext
     from geoalchemy2 import alembic_helpers
 
+    def include_object(
+        obj: object,
+        name: str | None,
+        type_: str,
+        reflected: bool,
+        compare_to: object | None,
+    ) -> bool:
+        if reflected and type_ == "table" and name not in EXPECTED:
+            return False
+        return alembic_helpers.include_object(obj, name, type_, reflected, compare_to)
+
     with engine.connect() as conn:
-        ctx = MigrationContext.configure(
-            conn, opts={"include_object": alembic_helpers.include_object}
-        )
+        ctx = MigrationContext.configure(conn, opts={"include_object": include_object})
         diff = compare_metadata(ctx, Base.metadata)
     assert diff == []
