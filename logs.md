@@ -103,3 +103,10 @@ Phase 6 page implementation is complete. Its full live-data acceptance is **not 
 - Full pre-change backend verification passed: 236 tests, Ruff and strict MyPy. All database/contract tests used the dedicated `_test` database.
 - Added `analyze-all` with failure isolation and explicit `--resume` batch recovery. Recovery skips a successful run only at the current pipeline version and configured H3 resolution; omit resume after input/config changes or when a fresh snapshot is required.
 - Validation: Ruff, strict MyPy and two new batch tests passed; `analyze-all --resume` correctly skipped all three compatible successful runs.
+
+### Phases 6–7: Automated browser acceptance and dependency audit
+
+- Added Playwright coverage for all six planned geospatial E2E flows (map area/metric flows share one test), with CI fixture mode and real-API local mode. All five browser tests passed against the persisted real city analyses.
+- Configured CI browser installation and failure artifacts; excluded generated reports from source lint/formatting.
+- Applied a scoped patched `minimatch` override rather than downgrading the lint toolchain. npm audit now reports zero vulnerabilities.
+- Validation: frontend lint, typecheck and 15 unit tests passed, plus real-API browser tests.
