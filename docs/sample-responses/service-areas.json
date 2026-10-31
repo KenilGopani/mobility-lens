@@ -1,0 +1,40 @@
+{
+  "items": [
+    {
+      "id": "69aff624-98e9-44b7-9d6f-0584d9e49079",
+      "name": "Foster City",
+      "slug": "foster-city",
+      "source": "census-cb-2023:0625338",
+      "score": 52.03173648946206,
+      "confidence": 1.0,
+      "rank": 2,
+      "analysis_run_id": "cf1ae1f3-c1a7-4bb5-8e46-e887c2309012",
+      "last_run_at": "2026-10-25T19:20:27.718042Z"
+    },
+    {
+      "id": "538677dd-bbe5-4ca9-aac3-ab65c1979c9c",
+      "name": "Mountain View",
+      "slug": "mountain-view",
+      "source": "census-cb-2023:0649670",
+      "score": 52.68103141174383,
+      "confidence": 1.0,
+      "rank": 1,
+      "analysis_run_id": "a89eb179-d7c9-4097-8e28-1b2e6f544022",
+      "last_run_at": "2026-10-25T19:24:05.128087Z"
+    },
+    {
+      "id": "e3cf8b24-7a6f-4fe1-9f99-ff7629003cf7",
+      "name": "San Jose",
+      "slug": "san-jose",
+      "source": "census-cb-2023:0668000",
+      "score": 44.12827641143103,
+      "confidence": 1.0,
+      "rank": 3,
+      "analysis_run_id": "171fb58c-59f0-4536-b860-e7f15218c794",
+      "last_run_at": "2026-10-25T19:26:56.385939Z"
+    }
+  ],
+  "total": 3,
+  "limit": 200,
+  "offset": 0
+}

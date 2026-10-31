@@ -77,9 +77,9 @@ Backend implements domain/migrations, Census boundaries, cached OSM ingestion, H
 | Interactive H3 map                    | `6967128` — `feat(frontend): explore service areas on an interactive H3 map`        |
 | Map worker integration                | `eda4d00` — `fix(frontend): bundle MapLibre workers for development and production` |
 
-## Current handoff and remaining work
+## Historical handoff after Phase 6
 
-Phase 6 page implementation is complete. Its full live-data acceptance is **not certified yet**: no local API or Docker daemon was running during this session. Browser checks used the labeled test-only API, and automated UI tests used deterministic mocks. No real scores or live-data results were fabricated. The previously generated, untracked `graphify-out/` analysis folder was left out of feature commits.
+This earlier handoff is superseded by the full-roadmap completion entries below. At that time Phase 6 page implementation was complete, but live-data acceptance was **not certified yet**: no local API or Docker daemon was running during this session. Browser checks used the labeled test-only API, and automated UI tests used deterministic mocks. No real scores or live-data results were fabricated. The previously generated, untracked `graphify-out/` analysis folder was left out of feature commits.
 
 1. Start Docker/PostGIS and follow README setup. Seed all three candidate areas and produce successful runs with the same pipeline (Phase 7). Existing boundary files alone do not prove those runs exist.
 2. Rerun backend integration/contract tests against a dedicated `_test` database, then execute the six PLAN E2E flows against the real API. The browser checks above are manual verification, not an automated Playwright suite.
@@ -135,3 +135,43 @@ Phase 6 page implementation is complete. Its full live-data acceptance is **not 
 - Measured final p95 (10 warm samples): summary 5.04 ms, comparison 3.78 ms, viewport 54.66 ms, full_area_cells 159.73 ms, synthetic_operations 22.05 ms.
 - Added `calibration-report` and reviewed all three real city outputs. Retained fixed v1 ranges/weights rather than tuning to force an outcome; no area-level clipping was observed. Corrected the written directness definition to match the existing, unchanged computation.
 - Validation: full backend **250 tests passed**, Ruff and strict MyPy passed; stale-run preview found no interrupted runs needing changes. See `docs/reliability.md`, `docs/performance.json` and `docs/calibration.md` for evidence and limitations.
+
+### Phase 10: Portfolio artifacts and delivery checklist
+
+- Added an opt-in `npm run demo:record` workflow and captured a short WebM walkthrough plus overview, real H3 map, comparison and clearly labeled synthetic Operations screenshots.
+- Captured useful overview render at 738 ms in the local browser. Screenshots use actual persisted OSM/Census results; only the Operations scenario is synthetic. Capture metadata records that distinction.
+- Added reusable Mermaid architecture source, public API example JSON, an export script and a source-grounded decision walkthrough. The example explains Mountain View's 0.65-point baseline lead and the temporary intersection-only model that favors Foster City.
+- Expanded README with problem/audience, screenshots/demo, architecture/stack/data flow, metrics/assumptions, quality design, synthetic disclaimer, setup/tests, tradeoffs and optional future work. Updated PLAN with a phase-by-phase delivery status while preserving the original roadmap history.
+- Final checks: **250 backend tests passed, 92% branch-inclusive coverage**, Ruff format/lint, strict MyPy, **16 frontend tests**, ESLint/Prettier, strict TypeScript and production build passed. **6 browser tests passed** against the real API and in CI fixture mode; recording passed separately. The normal suite intentionally skips the opt-in demo-recording test and the backend excludes external live-data tests by default.
+- Live migration is at `0002 (head)`; Alembic check reports no new upgrade operations. npm audit reports zero vulnerabilities. Remote CI was configured but not triggered, and no public deployment/push/merge was performed.
+
+## Current delivery status
+
+All defined phases 0–10 are implemented and locally validated for the portfolio scope. Earlier historical handoff limitations above have been resolved by the full-roadmap entries. The PLAN's optional future enhancements are outside these delivered phases.
+
+| Phase | Status and evidence |
+| --- | --- |
+| 0: Design | Architecture, domain/scoring/API documents and accepted ADRs |
+| 1: Foundation | Toolchains, PostGIS Compose, lint/type/build checks and CI workflows |
+| 2: Database | ORM/schema parity, migration round trips and persistence tests |
+| 3: Ingestion | Public OSM/Census runs, deterministic spatial fixtures and atomic rollback |
+| 4: Scoring | Pure normalization/scoring tests and real-output reference-range review |
+| 5: API | OpenAPI contract, consistent errors and real PostGIS integration tests |
+| 6: Frontend | Five decision pages with component and browser acceptance |
+| 7: Candidates | Three cities, same pipeline/version/resolution; batch execution/recovery |
+| 8: Operations | Strict synthetic labeling, seeded scenarios, read APIs and dashboard |
+| 9: Reliability | Request diagnostics/readiness, recovery, measured latency and spatial query plan |
+| 10: Portfolio | Screenshots, video, API examples, diagram and decision walkthrough |
+
+### New module commits
+
+- `df9ba1b`: candidate batch analysis and recovery.
+- `ba4d612`: real-API/CI browser workflows and patched dependency tooling.
+- `62eb274`: synthetic scenario schema, generation and read APIs.
+- `e129904`: explicitly synthetic operational dashboard.
+- `1e4d56d`: diagnostics, recovery, performance evidence and range review.
+- Portfolio artifacts and the current checklist are included in the accompanying `docs(portfolio): complete roadmap evidence and demo handoff` commit.
+
+### Continuing from this release
+
+Use README for setup, `docs/reliability.md` for recovery/profiling and `docs/decision-walkthrough.md` for the demo narrative. Refresh public snapshots deliberately through the CLI; the captured geographic runs are from 2026-10-25. Geographic weights/ranges remain explicit assumptions, and simulated route outcomes are never evidence of real service performance. Local validation does not constitute production certification. If continuing with optional features or deployment, append a new dated module entry here and keep the same focused-commit convention and repository owner identity.

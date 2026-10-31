@@ -1,0 +1,118 @@
+{
+  "id": "538677dd-bbe5-4ca9-aac3-ab65c1979c9c",
+  "name": "Mountain View",
+  "slug": "mountain-view",
+  "scoring_model": {
+    "id": "d948778c-0141-4687-ac6a-3a20ecf9a5ed",
+    "name": "baseline",
+    "version": "v1",
+    "weights": {
+      "road_density": 0.25,
+      "avg_node_degree": 0.2,
+      "network_directness": 0.15,
+      "intersection_density": 0.25,
+      "metadata_completeness": 0.15
+    }
+  },
+  "score": 52.68103141174383,
+  "confidence": 1.0,
+  "rank": 1,
+  "ranked_areas": 3,
+  "components": [
+    {
+      "metric": "road_density",
+      "display_name": "Road density",
+      "raw_value": 10.229489228431174,
+      "normalized_value": 0.40917956913724696,
+      "weight": 0.25,
+      "effective_weight": 0.25,
+      "contribution": 10.229489228431174,
+      "confidence": 1.0
+    },
+    {
+      "metric": "avg_node_degree",
+      "display_name": "Average node degree",
+      "raw_value": 2.971172325432415,
+      "normalized_value": 0.6474482169549433,
+      "weight": 0.2,
+      "effective_weight": 0.2,
+      "contribution": 12.948964339098865,
+      "confidence": 1.0
+    },
+    {
+      "metric": "network_directness",
+      "display_name": "Network directness",
+      "raw_value": 0.9376481707228626,
+      "normalized_value": 0.7921605690762086,
+      "weight": 0.15,
+      "effective_weight": 0.15,
+      "contribution": 11.882408536143128,
+      "confidence": 1.0
+    },
+    {
+      "metric": "intersection_density",
+      "display_name": "Intersection density",
+      "raw_value": 42.54996321684504,
+      "normalized_value": 0.28366642144563364,
+      "weight": 0.25,
+      "effective_weight": 0.25,
+      "contribution": 7.091660536140841,
+      "confidence": 1.0
+    },
+    {
+      "metric": "metadata_completeness",
+      "display_name": "Metadata completeness",
+      "raw_value": 0.7019005847953217,
+      "normalized_value": 0.7019005847953217,
+      "weight": 0.15,
+      "effective_weight": 0.15,
+      "contribution": 10.528508771929825,
+      "confidence": 1.0
+    }
+  ],
+  "strengths": [
+    {
+      "metric": "network_directness",
+      "display_name": "Network directness",
+      "raw_value": 0.9376481707228626,
+      "normalized_value": 0.7921605690762086,
+      "unit": "ratio"
+    },
+    {
+      "metric": "metadata_completeness",
+      "display_name": "Metadata completeness",
+      "raw_value": 0.7019005847953217,
+      "normalized_value": 0.7019005847953217,
+      "unit": "fraction"
+    }
+  ],
+  "risks": [
+    {
+      "metric": "intersection_density",
+      "display_name": "Intersection density",
+      "raw_value": 42.54996321684504,
+      "normalized_value": 0.28366642144563364,
+      "unit": "per km2"
+    },
+    {
+      "metric": "road_density",
+      "display_name": "Road density",
+      "raw_value": 10.229489228431174,
+      "normalized_value": 0.40917956913724696,
+      "unit": "km/km2"
+    }
+  ],
+  "warnings": [],
+  "finding_counts": {
+    "info": 0,
+    "warning": 0,
+    "critical": 0
+  },
+  "run": {
+    "id": "a89eb179-d7c9-4097-8e28-1b2e6f544022",
+    "status": "succeeded",
+    "pipeline_version": "0.1.0",
+    "started_at": "2026-10-25T19:21:17.296830Z",
+    "completed_at": "2026-10-25T19:24:05.128087Z"
+  }
+}
