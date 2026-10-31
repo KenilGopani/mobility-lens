@@ -8,10 +8,12 @@ from app.repositories import analysis_runs, scoring_models
 from app.schemas.api import AnalysisRunOut, AnalysisRunPage, ScoringModelList, ScoringModelOut
 from app.schemas.domain import RunStatus
 from app.services.errors import NotFoundError
+from app.services.provenance import public_source
 
 
 def _run_out(run: object) -> AnalysisRunOut:
-    return AnalysisRunOut.model_validate(run, from_attributes=True)
+    result = AnalysisRunOut.model_validate(run, from_attributes=True)
+    return result.model_copy(update={"source_metadata": public_source(result.source_metadata)})
 
 
 def list_runs(

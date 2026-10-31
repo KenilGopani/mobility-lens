@@ -9,6 +9,28 @@ A full-stack geospatial decision-intelligence platform for comparing mobility se
 
 ---
 
+## Delivery status — 2026-10-31
+
+Phases 0–10 below are implemented and locally validated. This document retains the original design history; accepted ADRs and current API/docs supersede older stack examples (notably MapLibre replaces Mapbox).
+
+| Phase                    | Delivery evidence                                                                      |
+| ------------------------ | -------------------------------------------------------------------------------------- |
+| 0 — Design               | Architecture, schema, scoring docs and ADRs 001–008                                    |
+| 1 — Foundation           | Backend/frontend checks, PostGIS Compose and CI browser workflow                       |
+| 2 — Domain/database      | Migrations 0001–0002; upgrade/downgrade and ORM round-trip tests                       |
+| 3 — Geospatial ingestion | Persisted OSM/Census runs, stage logs and atomic failure tests                         |
+| 4 — Metrics/scoring      | Deterministic tests and `docs/calibration.md` real-output review                       |
+| 5 — Read API             | Committed OpenAPI and passing database/contract tests                                  |
+| 6 — Frontend             | Five decision pages, unit tests and six planned browser flows                          |
+| 7 — Candidates           | Foster City, Mountain View and San Jose processed by the same pipeline; batch recovery |
+| 8 — Synthetic operations | Seeded scenarios, enforced labeling, read API and Operations dashboard                 |
+| 9 — Reliability          | Request telemetry, readiness, recovery and measured query plans                        |
+| 10 — Portfolio           | Screenshots, demo video, examples, diagram and decision walkthrough                    |
+
+See `logs.md` for implementation commits and validation details. Local verification is distinct from remote CI/public deployment; the latter has not been performed. Original future-enhancement ideas remain optional.
+
+---
+
 ## 1. Product Principle
 
 This project should demonstrate the exact engineering pattern expected from an internal tooling / analytics developer:

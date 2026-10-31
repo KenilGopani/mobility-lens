@@ -137,6 +137,104 @@ def analyze_area_command(
     typer.echo(f"  score: {score} (confidence {confidence:.2f}), findings: {summary.findings}")
 
 
+@app.command("analyze-all")
+def analyze_all_command(
+    resume: Annotated[
+        bool,
+        typer.Option(help="Skip compatible successes when resuming an unchanged batch."),
+    ] = False,
+) -> None:
+    """Analyze every seeded area; continue after individual failures and report all results."""
+    from pipelines.batch import analyze_all
+
+    configure_logging(get_settings().log_level)
+    with _session() as session:
+        try:
+            result = analyze_all(session, resume=resume)
+        except ValueError as exc:
+            typer.echo(str(exc), err=True)
+            raise typer.Exit(code=2) from exc
+    for summary in result.succeeded:
+        typer.echo(
+            f"succeeded: {summary.service_area_id} "
+            f"run={summary.analysis_run_id} score={summary.score}"
+        )
+    for slug in result.skipped:
+        typer.echo(f"skipped: {slug} (successful run already available)")
+    for slug, error in result.failed.items():
+        typer.echo(f"failed: {slug}: {error}", err=True)
+    if result.failed:
+        raise typer.Exit(code=1)
+
+
+@app.command("simulate-area")
+def simulate_area_command(
+    slug: str,
+    seed: Annotated[int, typer.Option(min=0, max=2147483647)] = 42,
+    routes: Annotated[int, typer.Option(min=1, max=100000)] = 500,
+) -> None:
+    """Generate a strictly SYNTHETIC operational scenario; never changes geographic scores."""
+    from pipelines.simulation import create_simulation
+
+    with _session() as session, session.begin():
+        try:
+            run = create_simulation(session, slug, seed=seed, routes=routes)
+        except ValueError as exc:
+            typer.echo(str(exc), err=True)
+            raise typer.Exit(code=2) from exc
+        typer.echo(f"SYNTHETIC simulation {run.id}: seed={run.seed} routes={routes}")
+
+
+@app.command("recover-stale-runs")
+def recover_stale_runs_command(
+    older_than_hours: Annotated[int, typer.Option(min=1)] = 24,
+    apply: Annotated[
+        bool,
+        typer.Option(
+            help="Mark stale running attempts failed, after confirming their worker stopped."
+        ),
+    ] = False,
+) -> None:
+    """Preview interrupted runs; use --apply only when no process still owns those runs."""
+    from datetime import UTC, datetime, timedelta
+
+    from app.repositories import analysis_runs
+
+    cutoff = datetime.now(UTC) - timedelta(hours=older_than_hours)
+    with _session() as session, session.begin():
+        for run in analysis_runs.stale_running(session, cutoff, lock=apply):
+            typer.echo(f"{'recover' if apply else 'preview'}: {run.id}")
+            if apply:
+                analysis_runs.mark_failed(session, run, "Operator recovered an interrupted run")
+    typer.echo("Use analyze-all --resume to retry incomplete areas.")
+
+
+@app.command("calibration-report")
+def calibration_report_command(output: Path) -> None:
+    """Write a descriptive real-data reference-range review without changing assumptions."""
+    from cli.calibration import report
+
+    with _session() as session:
+        output.write_text(report(session))
+    typer.echo(f"wrote {output}")
+
+
+@app.command("benchmark-api")
+def benchmark_api_command(
+    output: Path,
+    base_url: str = "http://127.0.0.1:8000",
+    samples: Annotated[int, typer.Option(min=1, max=100)] = 10,
+) -> None:
+    """Measure local read APIs and inspect the existing spatial query plan (read-only)."""
+    import json
+
+    from cli.benchmark import benchmark
+
+    result = benchmark(base_url, samples)
+    output.write_text(json.dumps(result, indent=2))
+    typer.echo(f"wrote {output}")
+
+
 @app.command("export-openapi")
 def export_openapi(
     output: Annotated[Path, typer.Option(help="Where to write the OpenAPI document.")] = (

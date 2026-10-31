@@ -1,0 +1,91 @@
+{
+  "service_area_id": "538677dd-bbe5-4ca9-aac3-ab65c1979c9c",
+  "simulation": {
+    "id": "b90f3c54-2de5-40dc-aa3a-f60e0ca2cf68",
+    "analysis_run_id": "a89eb179-d7c9-4097-8e28-1b2e6f544022",
+    "seed": 43,
+    "generator_version": "v1",
+    "parameters": {
+      "routes": 500,
+      "seeded_at": "2026-10-31T21:44:47.465114+00:00",
+      "time_basis": "UTC",
+      "distribution": "illustrative-v1"
+    },
+    "simulated_start_at": "2026-10-25T19:24:05.128087Z",
+    "created_at": "2026-10-31T21:44:47.439405Z",
+    "synthetic": true
+  },
+  "route_count": 500,
+  "completion_rate": 0.896,
+  "intervention_rate": 0.112,
+  "mean_trip_duration_minutes": 36.971191964285715,
+  "issue_count": 56,
+  "open_issues": 9,
+  "resolved_issues": 47,
+  "mean_resolution_hours": 38.128638297872335,
+  "issues_by_severity": {
+    "info": 24,
+    "warning": 24,
+    "critical": 8
+  },
+  "days": [
+    {
+      "date": "2026-10-25",
+      "routes": 19,
+      "completed": 18,
+      "interventions": 1,
+      "completion_rate": 0.9473684210526315,
+      "mean_duration_minutes": 32.312888888888885
+    },
+    {
+      "date": "2026-10-26",
+      "routes": 96,
+      "completed": 91,
+      "interventions": 3,
+      "completion_rate": 0.9479166666666666,
+      "mean_duration_minutes": 37.90625274725274
+    },
+    {
+      "date": "2026-10-27",
+      "routes": 96,
+      "completed": 86,
+      "interventions": 14,
+      "completion_rate": 0.8958333333333334,
+      "mean_duration_minutes": 34.90236046511629
+    },
+    {
+      "date": "2026-10-28",
+      "routes": 96,
+      "completed": 83,
+      "interventions": 9,
+      "completion_rate": 0.8645833333333334,
+      "mean_duration_minutes": 37.97271084337349
+    },
+    {
+      "date": "2026-10-29",
+      "routes": 96,
+      "completed": 89,
+      "interventions": 17,
+      "completion_rate": 0.9270833333333334,
+      "mean_duration_minutes": 36.835168539325835
+    },
+    {
+      "date": "2026-10-30",
+      "routes": 96,
+      "completed": 80,
+      "interventions": 12,
+      "completion_rate": 0.8333333333333334,
+      "mean_duration_minutes": 38.69457500000001
+    },
+    {
+      "date": "2026-10-31",
+      "routes": 1,
+      "completed": 1,
+      "interventions": 0,
+      "completion_rate": 1.0,
+      "mean_duration_minutes": 4.759
+    }
+  ],
+  "synthetic": true,
+  "disclaimer": "Illustrative synthetic scenario, not real fleet data or a forecast."
+}

@@ -309,7 +309,11 @@ def _run_stages(
                 affected_fraction=f.affected_fraction,
                 metadata=f.metadata,
             )
-        counts.update(findings=len(findings))
+        counts.update(
+            findings=len(findings),
+            warning_count=sum(f.severity == "warning" for f in findings),
+            critical_count=sum(f.severity == "critical" for f in findings),
+        )
 
     with stage(log, "score") as counts:
         _, result = score_and_store(session, run.id, area_metrics)

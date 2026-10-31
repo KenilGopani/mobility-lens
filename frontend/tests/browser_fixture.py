@@ -162,6 +162,49 @@ def get_payload(path, query):
             "ranked_areas": 3,
             "finding_counts": {"critical": 0, "warning": 1, "info": 0},
         }
+    simulation = {
+        "id": f"30000000-0000-4000-8000-{i + 1:012}",
+        "analysis_run_id": area["run"]["id"],
+        "seed": 42 + i,
+        "generator_version": "browser-fixture",
+        "parameters": {"routes": 500, "source": "synthetic-browser-fixture"},
+        "simulated_start_at": RUN["started_at"],
+        "created_at": RUN["completed_at"],
+        "synthetic": True,
+    }
+    if suffix == "simulations":
+        return {
+            "items": [simulation],
+            "total": 1,
+            "limit": 200,
+            "offset": 0,
+            "synthetic": True,
+        }
+    if suffix == "operations":
+        return {
+            "service_area_id": IDS[i],
+            "simulation": simulation,
+            "synthetic": True,
+            "route_count": 500,
+            "completion_rate": 0.92,
+            "intervention_rate": 0.16,
+            "mean_trip_duration_minutes": 24.5,
+            "issue_count": 15,
+            "open_issues": 3,
+            "resolved_issues": 12,
+            "mean_resolution_hours": 8.5,
+            "issues_by_severity": {"info": 7, "warning": 5, "critical": 3},
+            "days": [
+                {
+                    "date": "2026-10-30",
+                    "routes": 500,
+                    "completed": 460,
+                    "interventions": 80,
+                    "completion_rate": 0.92,
+                    "mean_duration_minutes": 24.5,
+                }
+            ],
+        }
     if suffix == "metrics":
         return {
             "service_area_id": IDS[i],

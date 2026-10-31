@@ -22,7 +22,7 @@ MVP_AREAS: dict[str, str] = {
 
 METRIC_VERSION = "v1"
 
-# Provisional reference ranges (docs/scoring-model.md); frozen as v1 after Phase 4 calibration.
+# Fixed v1 ranges retained after the descriptive review in docs/calibration.md.
 METRIC_DEFINITIONS: list[dict[str, Any]] = [
     {
         "key": "intersection_density",
@@ -51,7 +51,7 @@ METRIC_DEFINITIONS: list[dict[str, Any]] = [
     {
         "key": "network_directness",
         "display_name": "Network directness",
-        "description": "1 / circuity_avg, length-weighted.",
+        "description": "Clipped straight-line lengths / path lengths; self-loops excluded.",
         "unit": "ratio",
         "ref_min": 0.7,
         "ref_max": 1.0,

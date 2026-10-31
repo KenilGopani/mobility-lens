@@ -68,3 +68,14 @@ Triggering analysis via API, authentication, write endpoints for areas.
 - **Quality**: `completeness` = `cells_count`, per-metric `null_cells`/`null_share` (cell has no non-null raw value), `low_confidence_cells/share` (cell with any metric confidence < `low_confidence_threshold` = 0.5), plus `source` (run.source_metadata) and `analyzed_at`.
 - **Comparison/preview**: DQ-006 appears as `peer_outliers` and a `peer_outlier:<metric>` warning (only with >= 3 areas that have data; computed on raw values). Preview accepts 1-3 distinct areas; `scoring_model.id` is null; response has `"temporary": true`. Invalid weights return 422 with `details[0] = {loc, msg, type, missing, unexpected}`.
 - **Errors**: `not_found` (404, also unknown routes), `validation_error` (422, including remapped FastAPI validation errors, `details` = list of `{loc,msg,type}`), `method_not_allowed` (405), `payload_too_large` (413, bodies > 64 KB), `internal` (500, no internals leaked).
+
+## Synthetic operational analytics (Phase 8)
+
+- `GET /service-areas/{id}/simulations?limit=50&offset=0` lists scenarios newest-first, with explicit `synthetic: true` on the response and each run.
+- `GET /service-areas/{id}/operations?simulation_run_id=<optional UUID>` returns the requested scenario for this area, or its newest scenario. No scenario/incorrect ownership returns 404. The response is always `synthetic: true` and includes an explicit disclaimer.
+- Metrics: route count, completion fraction, intervention fraction (routes with at least one intervention), mean completed-trip duration, issue counts by severity/status and mean resolution hours over resolved issues. Null means no denominator, never zero-filled. Daily UTC series include route/completion/intervention counts and completed-trip duration.
+- Generation is CLI-only: `python -m cli simulate-area <slug> --seed 42 --routes 500`. Identical source run, seed, count and generator version reuse the existing scenario. Synthetic metrics never enter geographic scores.
+
+## Reliability diagnostics
+
+`GET /ready` returns 200 when the database is reachable and 503 otherwise. API responses include generated `X-Request-ID` and `Server-Timing` headers. Public metric, quality and analysis-run provenance omits local cache directory paths while preserving source IDs, cache keys, query parameters and timestamps.

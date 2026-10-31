@@ -684,3 +684,19 @@ tbody th {
     grid-template-columns: repeat(2, 1fr);
   }
 }
+
+.synthetic-banner {
+  border: 1px solid #dac794;
+  background: #fff6df;
+  padding: 18px 22px;
+  border-radius: 9px;
+  margin-bottom: 24px;
+  color: #7d6028;
+  font-size: 13px;
+}
+.synthetic-banner p {
+  margin: 8px 0 0;
+}
+.synthetic-banner strong {
+  font-size: 13px;
+}

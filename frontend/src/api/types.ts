@@ -145,3 +145,35 @@ export interface Cells extends FeatureCollection<Geometry, CellProperties> {
   limit: number;
   truncated: boolean;
 }
+
+export interface Simulation {
+  id: string;
+  analysis_run_id: string;
+  seed: number;
+  generator_version: string;
+  parameters: Record<string, unknown>;
+  simulated_start_at: string;
+  created_at: string;
+  synthetic: true;
+}
+export interface Operations {
+  synthetic: true;
+  simulation: Simulation;
+  route_count: number;
+  completion_rate: number | null;
+  intervention_rate: number | null;
+  mean_trip_duration_minutes: number | null;
+  issue_count: number;
+  open_issues: number;
+  resolved_issues: number;
+  mean_resolution_hours: number | null;
+  issues_by_severity: Record<string, number>;
+  days: {
+    date: string;
+    routes: number;
+    completed: number;
+    interventions: number;
+    completion_rate: number | null;
+    mean_duration_minutes: number | null;
+  }[];
+}

@@ -1,0 +1,96 @@
+{
+  "service_area_id": "538677dd-bbe5-4ca9-aac3-ab65c1979c9c",
+  "run": {
+    "id": "a89eb179-d7c9-4097-8e28-1b2e6f544022",
+    "status": "succeeded",
+    "pipeline_version": "0.1.0",
+    "started_at": "2026-10-25T19:21:17.296830Z",
+    "completed_at": "2026-10-25T19:24:05.128087Z"
+  },
+  "analyzed_at": "2026-10-25T19:24:05.128087Z",
+  "source": {
+    "query": "Mountain View",
+    "source": "overpass",
+    "simplify": true,
+    "cache_key": "daa2fbdd8dfcaffe",
+    "edge_count": 3650,
+    "fetched_at": "2026-10-25T19:24:04.603911+00:00",
+    "node_count": 1561,
+    "network_type": "drive",
+    "osmnx_version": "2.1.1",
+    "polygon_bounds": [-122.117622, 37.354068, -122.044979, 37.45195],
+    "boundary_area_km2": 31.351378
+  },
+  "metrics": [
+    {
+      "key": "avg_node_degree",
+      "display_name": "Average node degree",
+      "description": "Mean street_count over nodes inside the region.",
+      "unit": "streets/node",
+      "higher_is_better": true,
+      "normalization_method": "minmax_fixed",
+      "ref_min": 2.0,
+      "ref_max": 3.5,
+      "version": "v1",
+      "raw_value": 2.971172325432415,
+      "normalized_value": 0.6474482169549433,
+      "confidence": 1.0
+    },
+    {
+      "key": "intersection_density",
+      "display_name": "Intersection density",
+      "description": "Nodes with street_count >= 3 per km2 of land area.",
+      "unit": "per km2",
+      "higher_is_better": true,
+      "normalization_method": "minmax_fixed",
+      "ref_min": 0.0,
+      "ref_max": 150.0,
+      "version": "v1",
+      "raw_value": 42.54996321684504,
+      "normalized_value": 0.28366642144563364,
+      "confidence": 1.0
+    },
+    {
+      "key": "metadata_completeness",
+      "display_name": "Metadata completeness",
+      "description": "Mean fraction of drivable edges tagged maxspeed, lanes and name.",
+      "unit": "fraction",
+      "higher_is_better": true,
+      "normalization_method": "minmax_fixed",
+      "ref_min": 0.0,
+      "ref_max": 1.0,
+      "version": "v1",
+      "raw_value": 0.7019005847953217,
+      "normalized_value": 0.7019005847953217,
+      "confidence": 1.0
+    },
+    {
+      "key": "network_directness",
+      "display_name": "Network directness",
+      "description": "Clipped straight-line lengths / path lengths; self-loops excluded.",
+      "unit": "ratio",
+      "higher_is_better": true,
+      "normalization_method": "minmax_fixed",
+      "ref_min": 0.7,
+      "ref_max": 1.0,
+      "version": "v1",
+      "raw_value": 0.9376481707228626,
+      "normalized_value": 0.7921605690762086,
+      "confidence": 1.0
+    },
+    {
+      "key": "road_density",
+      "display_name": "Road density",
+      "description": "Drivable edge length (each physical street once) per km2.",
+      "unit": "km/km2",
+      "higher_is_better": true,
+      "normalization_method": "minmax_fixed",
+      "ref_min": 0.0,
+      "ref_max": 25.0,
+      "version": "v1",
+      "raw_value": 10.229489228431174,
+      "normalized_value": 0.40917956913724696,
+      "confidence": 1.0
+    }
+  ]
+}

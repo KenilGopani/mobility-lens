@@ -1,3 +1,4 @@
+import type { Simulation, Operations } from './types';
 import type {
   Area,
   Cells,
@@ -100,3 +101,22 @@ export const previewScores = (
     body: JSON.stringify({ service_area_ids: ids, weights }),
     signal,
   });
+
+export async function getSimulations(id: string, signal?: AbortSignal): Promise<Page<Simulation>> {
+  const all: Simulation[] = [];
+  let offset = 0;
+  while (true) {
+    const page = await request<Page<Simulation>>(
+      `${areaPath(id)}/simulations?limit=200&offset=${offset}`,
+      { signal },
+    );
+    all.push(...page.items);
+    offset += page.items.length;
+    if (offset >= page.total || !page.items.length) return { ...page, items: all, offset: 0 };
+  }
+}
+export const getOperations = (id: string, simulation?: string, signal?: AbortSignal) =>
+  request<Operations>(
+    `${areaPath(id)}/operations${simulation ? `?simulation_run_id=${encodeURIComponent(simulation)}` : ''}`,
+    { signal },
+  );

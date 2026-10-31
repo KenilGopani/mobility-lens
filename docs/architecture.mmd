@@ -1,0 +1,16 @@
+flowchart LR
+  OSM[Public OpenStreetMap network] --> PIPE[CLI geospatial pipeline]
+  CENSUS[Census land boundaries] --> PIPE
+  PIPE --> DB[(PostgreSQL + PostGIS)]
+  DB --> API[FastAPI read API]
+  API --> UI[React decision workspace]
+  UI --> MAP[MapLibre H3 exploration]
+  UI --> PLOT[Plotly comparisons and quality]
+  PREVIEW[Temporary scoring preview] --> API
+  SCORING[Pure normalization and scoring] --> PIPE
+  SCORING --> API
+  SEED[Seeded synthetic generator] --> SIM[CLI simulate-area]
+  DB --> SIM
+  SIM --> SYN[(Synthetic scenario tables)]
+  SYN --> API
+  API --> OPS[Operations page: synthetic label]

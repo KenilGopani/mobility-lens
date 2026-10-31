@@ -109,3 +109,9 @@ Constraints: CHECK `normalized_value BETWEEN 0 AND 1`, `confidence BETWEEN 0 AND
 ## Metric keys (MVP)
 
 `intersection_density`, `road_density`, `avg_node_degree`, `network_directness`, `metadata_completeness`. See [scoring-model.md](scoring-model.md) for definitions.
+
+## Synthetic operational entities (Phase 8)
+
+`simulation_runs` references a successful `analysis_runs` row and stores the seed, generator version, immutable scenario key, parameters and simulated start time. `route_events` and `operational_issues` belong to that scenario and cascade on scenario deletion. All three tables enforce non-null `is_synthetic = true`.
+
+Route attempts contain times, distance, duration, completion and intervention count. Issues contain category, severity, open/resolved state and consistent resolution timestamps. API aggregates are read from these tables, never mixed into geographic scores. See ADR-008 for denominator definitions and labeling rules.

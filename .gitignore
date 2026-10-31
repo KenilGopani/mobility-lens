@@ -28,3 +28,7 @@ coverage/
 .idea/
 .vscode/
 graphify-out/
+
+# Browser test artifacts
+playwright-report/
+test-results/

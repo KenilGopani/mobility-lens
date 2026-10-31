@@ -70,3 +70,51 @@ class BodySizeLimitMiddleware:
             }
         )
         await send({"type": "http.response.body", "body": body})
+
+
+class RequestTelemetryMiddleware:
+    """Log bounded metadata, never query strings, request bodies or credentials."""
+
+    def __init__(self, app: ASGIApp) -> None:
+        self.app = app
+
+    async def __call__(self, scope: Scope, receive: Receive, send: Send) -> None:
+        if scope["type"] != "http":
+            await self.app(scope, receive, send)
+            return
+        import time
+        import uuid
+
+        import structlog
+
+        request_id = str(uuid.uuid4())
+        started = time.perf_counter()
+        status = 500
+
+        async def timed_send(message: Message) -> None:
+            nonlocal status
+            if message["type"] == "http.response.start":
+                status = message["status"]
+                elapsed = (time.perf_counter() - started) * 1000
+                message = {
+                    **message,
+                    "headers": [
+                        *message.get("headers", []),
+                        (b"x-request-id", request_id.encode()),
+                        (b"server-timing", f"app;dur={elapsed:.2f}".encode()),
+                    ],
+                }
+            await send(message)
+
+        with structlog.contextvars.bound_contextvars(request_id=request_id):
+            try:
+                await self.app(scope, receive, timed_send)
+            finally:
+                route = scope.get("route")
+                structlog.get_logger().info(
+                    "http_request",
+                    method=scope["method"],
+                    route=getattr(route, "path", "unmatched"),
+                    status=status,
+                    duration_ms=round((time.perf_counter() - started) * 1000, 2),
+                )

@@ -71,3 +71,9 @@ Docker Compose runs PostGIS. Backend and frontend run natively (uvicorn, Vite).
 ## Out of scope for MVP
 
 Authentication, background workers, pipeline-trigger API, ML, Spark, synthetic data (Phase 8).
+
+## Operational scenarios and diagnostics
+
+The CLI-only `simulate-area` command uses the pure seeded generator and writes the three synthetic tables atomically. Operations reads aggregate a selected scenario pinned to a successful geographic analysis. A separate Operations page labels every view synthetic; it does not participate in geographic rankings.
+
+Request telemetry records route templates, generated request IDs, status and timing. Readiness and operator-controlled interrupted-run recovery are documented in [reliability.md](reliability.md). Local benchmark evidence is in [performance.json](performance.json); the fixed-range review is in [calibration.md](calibration.md).

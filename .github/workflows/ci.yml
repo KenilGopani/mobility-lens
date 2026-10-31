@@ -54,3 +54,14 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - uses: astral-sh/setup-uv@v5
+      - run: uv sync --project ../backend --frozen
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e
+        env:
+          E2E_FIXTURE: "1"
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: browser-test-artifacts
+          path: frontend/test-results/

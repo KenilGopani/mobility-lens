@@ -1,0 +1,63 @@
+{
+  "service_area_id": "538677dd-bbe5-4ca9-aac3-ab65c1979c9c",
+  "run": {
+    "id": "a89eb179-d7c9-4097-8e28-1b2e6f544022",
+    "status": "succeeded",
+    "pipeline_version": "0.1.0",
+    "started_at": "2026-10-25T19:21:17.296830Z",
+    "completed_at": "2026-10-25T19:24:05.128087Z"
+  },
+  "analyzed_at": "2026-10-25T19:24:05.128087Z",
+  "source": {
+    "query": "Mountain View",
+    "source": "overpass",
+    "simplify": true,
+    "cache_key": "daa2fbdd8dfcaffe",
+    "edge_count": 3650,
+    "fetched_at": "2026-10-25T19:24:04.603911+00:00",
+    "node_count": 1561,
+    "network_type": "drive",
+    "osmnx_version": "2.1.1",
+    "polygon_bounds": [-122.117622, 37.354068, -122.044979, 37.45195],
+    "boundary_area_km2": 31.351378
+  },
+  "findings": [],
+  "finding_counts": {
+    "info": 0,
+    "warning": 0,
+    "critical": 0
+  },
+  "completeness": {
+    "cells_count": 350,
+    "low_confidence_threshold": 0.5,
+    "low_confidence_cells": 157,
+    "low_confidence_share": 0.44857142857142857,
+    "metrics": [
+      {
+        "metric": "avg_node_degree",
+        "null_cells": 92,
+        "null_share": 0.26285714285714284
+      },
+      {
+        "metric": "intersection_density",
+        "null_cells": 92,
+        "null_share": 0.26285714285714284
+      },
+      {
+        "metric": "metadata_completeness",
+        "null_cells": 69,
+        "null_share": 0.19714285714285715
+      },
+      {
+        "metric": "network_directness",
+        "null_cells": 69,
+        "null_share": 0.19714285714285715
+      },
+      {
+        "metric": "road_density",
+        "null_cells": 0,
+        "null_share": 0.0
+      }
+    ]
+  }
+}

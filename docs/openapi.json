@@ -772,6 +772,172 @@
         "title": "MetricValue",
         "type": "object"
       },
+      "OperationsDay": {
+        "properties": {
+          "completed": {
+            "title": "Completed",
+            "type": "integer"
+          },
+          "completion_rate": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completion Rate"
+          },
+          "date": {
+            "format": "date",
+            "title": "Date",
+            "type": "string"
+          },
+          "interventions": {
+            "title": "Interventions",
+            "type": "integer"
+          },
+          "mean_duration_minutes": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mean Duration Minutes"
+          },
+          "routes": {
+            "title": "Routes",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "date",
+          "routes",
+          "completed",
+          "interventions",
+          "completion_rate",
+          "mean_duration_minutes"
+        ],
+        "title": "OperationsDay",
+        "type": "object"
+      },
+      "OperationsSummary": {
+        "properties": {
+          "completion_rate": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completion Rate"
+          },
+          "days": {
+            "items": {
+              "$ref": "#/components/schemas/OperationsDay"
+            },
+            "title": "Days",
+            "type": "array"
+          },
+          "disclaimer": {
+            "default": "Illustrative synthetic scenario, not real fleet data or a forecast.",
+            "title": "Disclaimer",
+            "type": "string"
+          },
+          "intervention_rate": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Intervention Rate"
+          },
+          "issue_count": {
+            "title": "Issue Count",
+            "type": "integer"
+          },
+          "issues_by_severity": {
+            "additionalProperties": {
+              "type": "integer"
+            },
+            "title": "Issues By Severity",
+            "type": "object"
+          },
+          "mean_resolution_hours": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mean Resolution Hours"
+          },
+          "mean_trip_duration_minutes": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mean Trip Duration Minutes"
+          },
+          "open_issues": {
+            "title": "Open Issues",
+            "type": "integer"
+          },
+          "resolved_issues": {
+            "title": "Resolved Issues",
+            "type": "integer"
+          },
+          "route_count": {
+            "title": "Route Count",
+            "type": "integer"
+          },
+          "service_area_id": {
+            "format": "uuid",
+            "title": "Service Area Id",
+            "type": "string"
+          },
+          "simulation": {
+            "$ref": "#/components/schemas/SimulationRef"
+          },
+          "synthetic": {
+            "const": true,
+            "default": true,
+            "title": "Synthetic",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "service_area_id",
+          "simulation",
+          "route_count",
+          "completion_rate",
+          "intervention_rate",
+          "mean_trip_duration_minutes",
+          "issue_count",
+          "open_issues",
+          "resolved_issues",
+          "mean_resolution_hours",
+          "issues_by_severity",
+          "days"
+        ],
+        "title": "OperationsSummary",
+        "type": "object"
+      },
       "PeerOutlier": {
         "description": "DQ-006, computed at read time over the compared set (never persisted).",
         "properties": {
@@ -1488,6 +1654,97 @@
         },
         "title": "SeverityCounts",
         "type": "object"
+      },
+      "SimulationPage": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SimulationRef"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "limit": {
+            "title": "Limit",
+            "type": "integer"
+          },
+          "offset": {
+            "title": "Offset",
+            "type": "integer"
+          },
+          "synthetic": {
+            "const": true,
+            "default": true,
+            "title": "Synthetic",
+            "type": "boolean"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "total",
+          "limit",
+          "offset"
+        ],
+        "title": "SimulationPage",
+        "type": "object"
+      },
+      "SimulationRef": {
+        "properties": {
+          "analysis_run_id": {
+            "format": "uuid",
+            "title": "Analysis Run Id",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "generator_version": {
+            "title": "Generator Version",
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "title": "Id",
+            "type": "string"
+          },
+          "parameters": {
+            "additionalProperties": true,
+            "title": "Parameters",
+            "type": "object"
+          },
+          "seed": {
+            "title": "Seed",
+            "type": "integer"
+          },
+          "simulated_start_at": {
+            "format": "date-time",
+            "title": "Simulated Start At",
+            "type": "string"
+          },
+          "synthetic": {
+            "const": true,
+            "default": true,
+            "title": "Synthetic",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "analysis_run_id",
+          "seed",
+          "generator_version",
+          "parameters",
+          "simulated_start_at",
+          "created_at"
+        ],
+        "title": "SimulationRef",
+        "type": "object"
       }
     }
   },
@@ -2081,6 +2338,76 @@
         ]
       }
     },
+    "/api/v1/service-areas/{service_area_id}/operations": {
+      "get": {
+        "operationId": "operations_summary_api_v1_service_areas__service_area_id__operations_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "service_area_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Service Area Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "simulation_run_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Simulation Run Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OperationsSummary"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Validation error"
+          }
+        },
+        "summary": "Operations Summary",
+        "tags": [
+          "synthetic operations"
+        ]
+      }
+    },
     "/api/v1/service-areas/{service_area_id}/quality": {
       "get": {
         "operationId": "get_quality_api_v1_service_areas__service_area_id__quality_get",
@@ -2153,6 +2480,84 @@
         ]
       }
     },
+    "/api/v1/service-areas/{service_area_id}/simulations": {
+      "get": {
+        "operationId": "list_simulations_api_v1_service_areas__service_area_id__simulations_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "service_area_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Service Area Id",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size",
+            "in": "query",
+            "name": "limit",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "description": "Page size",
+              "maximum": 200,
+              "minimum": 1,
+              "title": "Limit",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "offset",
+            "required": false,
+            "schema": {
+              "default": 0,
+              "minimum": 0,
+              "title": "Offset",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulationPage"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "404": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Resource not found"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            },
+            "description": "Validation error"
+          }
+        },
+        "summary": "List Simulations",
+        "tags": [
+          "synthetic operations"
+        ]
+      }
+    },
     "/api/v1/service-areas/{service_area_id}/summary": {
       "get": {
         "operationId": "get_summary_api_v1_service_areas__service_area_id__summary_get",
@@ -2222,6 +2627,27 @@
           }
         },
         "summary": "Health"
+      }
+    },
+    "/ready": {
+      "get": {
+        "operationId": "readiness_ready_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "503": {
+            "description": "Database unavailable"
+          }
+        },
+        "summary": "Readiness"
       }
     }
   }
