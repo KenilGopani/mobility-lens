@@ -16,16 +16,14 @@ function renderOverview() {
 it('shows unscored areas without turning missing scores into zero', async () => {
   vi.stubGlobal(
     'fetch',
-    vi
-      .fn()
-      .mockResolvedValue(
-        new Response(
-          JSON.stringify({
-            items: [{ id: 'a', name: 'Foster City', score: null, rank: null, confidence: null }],
-            total: 1,
-          }),
-        ),
+    vi.fn().mockResolvedValue(
+      new Response(
+        JSON.stringify({
+          items: [{ id: 'a', name: 'Foster City', score: null, rank: null, confidence: null }],
+          total: 1,
+        }),
       ),
+    ),
   );
   renderOverview();
   expect(await screen.findByText('No scored areas yet')).toBeInTheDocument();

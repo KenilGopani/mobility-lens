@@ -10,3 +10,5 @@ vi.stubGlobal('ResizeObserver', ResizeObserverStub);
 vi.mock('plotly.js-basic-dist-min', () => ({
   default: { react: vi.fn().mockResolvedValue(undefined), purge: vi.fn() },
 }));
+
+vi.stubGlobal('scrollTo', vi.fn());

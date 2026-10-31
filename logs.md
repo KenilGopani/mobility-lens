@@ -56,3 +56,41 @@ Backend implements domain/migrations, Census boundaries, cached OSM ingestion, H
 - Browser QA exposed a worker URL failure in MapLibre 6 when Vite prebundles the library. Added an explicit Vite-bundled module-worker URL so dev and production both include the worker and shared imports.
 - Verified rendered H3 cells, gray unavailable values, amber low-confidence outlines, area/metric changes and zoom controls in the browser.
 - Validation: lint, format check, strict typecheck, 15 tests and production build passed.
+
+### Integration, browser QA and handoff — 2026-10-31
+
+- Added an isolated, explicitly synthetic browser fixture server at `127.0.0.1:8011`, importing the backend scoring engine. It is opt-in, writes no database records and is excluded from the production app.
+- Browser-checked all five pages: overview ranking/chart; two-area comparison; severity filtering; weight redistribution to 100% and baseline restoration; San Jose area/metric selection; H3 fills, low-confidence outlines and map zoom. Checked the narrow layout and 1440 px desktop layout.
+- Browser verification caught and resolved the MapLibre module-worker integration issue. Added page-scroll reset on route changes and 0.01% slider precision to match displayed weights.
+- Expanded API tests for pagination, viewport bbox, cancellable POST payloads and server error messages. What-if test now checks that Plotly receives the updated score-contribution series.
+- Replaced stale README status with current setup, architecture, checks and test-fixture instructions.
+- Final automated verification: frontend lint, formatting, strict typecheck, **15 tests** and production build passed. Fixture Python passed Ruff and compilation. Backend application code was not changed.
+
+## Feature commit index
+
+| Module                                | Commit                                                                              |
+| ------------------------------------- | ----------------------------------------------------------------------------------- |
+| API client, shell, executive overview | `dbe8044` — `feat(frontend): build API-backed executive overview`                   |
+| Comparison                            | `524a6eb` — `feat(frontend): compare service areas with score breakdowns`           |
+| Data quality                          | `a9c1c96` — `feat(frontend): surface data quality findings and provenance`          |
+| What-if analysis                      | `de8c0c0` — `feat(frontend): preview temporary scoring weights`                     |
+| Interactive H3 map                    | `6967128` — `feat(frontend): explore service areas on an interactive H3 map`        |
+| Map worker integration                | `eda4d00` — `fix(frontend): bundle MapLibre workers for development and production` |
+
+## Current handoff and remaining work
+
+Phase 6 page implementation is complete. Its full live-data acceptance is **not certified yet**: no local API or Docker daemon was running during this session. Browser checks used the labeled test-only API, and automated UI tests used deterministic mocks. No real scores or live-data results were fabricated. The previously generated, untracked `graphify-out/` analysis folder was left out of feature commits.
+
+1. Start Docker/PostGIS and follow README setup. Seed all three candidate areas and produce successful runs with the same pipeline (Phase 7). Existing boundary files alone do not prove those runs exist.
+2. Rerun backend integration/contract tests against a dedicated `_test` database, then execute the six PLAN E2E flows against the real API. The browser checks above are manual verification, not an automated Playwright suite.
+3. Confirm real score calibration/reference ranges and inspect metadata completeness/source quality before making expansion decisions.
+4. Profile live queries, large-city cell truncation and map request timing before adding indexes/caches (Phase 9). Lazy MapLibre and Plotly vendor chunks exceed Vite's 500 kB advisory; the initial app is separate.
+5. Review dependency audit findings before deployment: npm reported 12 moderate findings during installation; no forced dependency upgrades were applied.
+6. Keep Phase 8 synthetic operational analytics deferred until the geospatial MVP is validated. Phase 10 screenshots, demo and portfolio polish can follow real-data acceptance.
+
+### Continuing development
+
+- Main UI: `frontend/src/pages/`. Shared states/formatters, charts and score tables: `frontend/src/components/`.
+- API shapes and functions: `frontend/src/api/types.ts`, `frontend/src/api/client.ts`; match `docs/openapi.json` when changing contracts.
+- Map lifecycle/worker/layers: `frontend/src/features/map/AreaMap.tsx`. Pure weight redistribution: `frontend/src/features/scoring/weights.ts`.
+- Add a dated feature entry here with implementation, validation and limitations, then make one Conventional Commit for that module. Use the configured repository author/committer identity.

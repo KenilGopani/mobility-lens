@@ -87,7 +87,7 @@ export function WhatIfPage() {
                     type="range"
                     min="0"
                     max="100"
-                    step="1"
+                    step="0.01"
                     value={value * 100}
                     aria-valuetext={`${number(value * 100, 2)} percent`}
                     onChange={(e) => setDraft(redistribute(weights, key, Number(e.target.value)))}

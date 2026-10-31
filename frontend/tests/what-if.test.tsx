@@ -3,6 +3,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { expect, it, vi } from 'vitest';
 import { WhatIfPage } from '../src/pages/WhatIfPage';
 import { previewScores } from '../src/api/client';
+import Plotly from 'plotly.js-basic-dist-min';
 vi.mock('../src/api/client', () => ({
   getAreas: vi.fn(async () => [{ id: 'a', name: 'Foster City' }]),
   getModels: vi.fn(async () => ({
@@ -25,7 +26,15 @@ vi.mock('../src/api/client', () => ({
         score: weights.road_density * 100,
         rank: 1,
         confidence: 1,
-        components: [],
+        components: [
+          {
+            metric: 'road_density',
+            raw_value: 0.8,
+            normalized_value: 0.8,
+            effective_weight: weights.road_density,
+            contribution: weights.road_density * 100,
+          },
+        ],
         strengths: [],
         risks: [],
         warnings: [],
@@ -52,6 +61,14 @@ it('sends valid temporary weights, updates scores and restores the default model
     ),
   );
   expect(await screen.findByRole('cell', { name: '80' })).toBeInTheDocument();
+  await waitFor(() =>
+    expect(Plotly.react).toHaveBeenCalledWith(
+      expect.anything(),
+      expect.arrayContaining([expect.objectContaining({ name: 'Road density', y: [80] })]),
+      expect.anything(),
+      expect.anything(),
+    ),
+  );
   fireEvent.click(screen.getByRole('button', { name: 'Restore default model' }));
   await waitFor(() => expect(slider).toHaveValue('50'));
   expect(screen.getByText(/NOT SAVED/)).toBeInTheDocument();

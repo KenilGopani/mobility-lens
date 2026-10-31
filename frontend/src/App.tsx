@@ -1,5 +1,6 @@
+import { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
+import { BrowserRouter, NavLink, Route, Routes, useLocation } from 'react-router-dom';
 import { OverviewPage } from './pages/OverviewPage';
 import { ComparisonPage } from './pages/ComparisonPage';
 import { QualityPage } from './pages/QualityPage';
@@ -10,6 +11,10 @@ const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
 });
 export function AppRoutes() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
   return (
     <div className="app-shell">
       <a className="skip-link" href="#main-content">
