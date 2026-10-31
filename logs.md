@@ -110,3 +110,11 @@ Phase 6 page implementation is complete. Its full live-data acceptance is **not 
 - Configured CI browser installation and failure artifacts; excluded generated reports from source lint/formatting.
 - Applied a scoped patched `minimatch` override rather than downgrading the lint toolchain. npm audit now reports zero vulnerabilities.
 - Validation: frontend lint, typecheck and 15 unit tests passed, plus real-API browser tests.
+
+### Phase 8 module 1: Synthetic scenarios and read APIs
+
+- Added ADR-008, an additive migration and three tables: simulation runs, route events and operational issues. Each table enforces `is_synthetic = true`; issue timestamps/status and route measures have database constraints.
+- Added deterministic seeded generation, scenario deduplication, source-run pinning and transactional `simulate-area` CLI. Requires a successful geographic run and leaves all geographic metrics/scores untouched.
+- Added paginated scenario listing and per-area operational summaries with daily UTC series, completion/intervention rates, completed-trip duration, severity/status counts and resolution hours. Responses explicitly set `synthetic: true`.
+- Migration review excluded extension-owned tables from autogeneration; the reviewed migration only creates the three application tables. No PostGIS/Tiger extension tables are altered.
+- Validation: full backend suite **247 passed**, Ruff formatting/lint and strict MyPy passed; includes migration upgrade/downgrade, reproducibility, duplicate prevention, synthetic-only constraints, aggregate math and HTTP contract tests.

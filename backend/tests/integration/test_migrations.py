@@ -12,7 +12,7 @@ EXPECTED = set(Base.metadata.tables)
 
 def test_all_tables_exist(engine: Engine) -> None:
     assert set(inspect(engine).get_table_names()) >= EXPECTED
-    assert len(EXPECTED) == 10
+    assert len(EXPECTED) == 13
 
 
 def test_no_tiger_or_topology_schemas(engine: Engine) -> None:

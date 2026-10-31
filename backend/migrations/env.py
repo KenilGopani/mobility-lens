@@ -16,9 +16,18 @@ if config.config_file_name is not None:
 # Phase 2 will point this at the declarative Base metadata.
 target_metadata = Base.metadata
 
+
+def include_object(obj, name, type_, reflected, compare_to):
+    # Ignore extension-owned tables exposed through the database search_path.
+    # Retiring an application table requires an explicit reviewed migration.
+    if type_ == "table" and reflected and compare_to is None and name not in target_metadata.tables:
+        return False
+    return alembic_helpers.include_object(obj, name, type_, reflected, compare_to)
+
+
 # geoalchemy2 helpers: handle spatial types/indexes and ignore PostGIS/tiger internal tables.
 _helpers = {
-    "include_object": alembic_helpers.include_object,
+    "include_object": include_object,
     "process_revision_directives": alembic_helpers.writer,
     "render_item": alembic_helpers.render_item,
 }

@@ -1,4 +1,5 @@
 from app.models.base import Base
+from app.models.operations import OperationalIssue, RouteEvent, SimulationRun
 from app.models.tables import (
     AnalysisRun,
     AnalysisRunCell,
@@ -22,6 +23,9 @@ __all__ = [
     "DataQualityFinding",
     "H3Cell",
     "MetricDefinition",
+    "OperationalIssue",
+    "RouteEvent",
     "ScoringModel",
     "ServiceArea",
+    "SimulationRun",
 ]

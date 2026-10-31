@@ -167,6 +167,24 @@ def analyze_all_command(
         raise typer.Exit(code=1)
 
 
+@app.command("simulate-area")
+def simulate_area_command(
+    slug: str,
+    seed: Annotated[int, typer.Option(min=0, max=2147483647)] = 42,
+    routes: Annotated[int, typer.Option(min=1, max=100000)] = 500,
+) -> None:
+    """Generate a strictly SYNTHETIC operational scenario; never changes geographic scores."""
+    from pipelines.simulation import create_simulation
+
+    with _session() as session, session.begin():
+        try:
+            run = create_simulation(session, slug, seed=seed, routes=routes)
+        except ValueError as exc:
+            typer.echo(str(exc), err=True)
+            raise typer.Exit(code=2) from exc
+        typer.echo(f"SYNTHETIC simulation {run.id}: seed={run.seed} routes={routes}")
+
+
 @app.command("export-openapi")
 def export_openapi(
     output: Annotated[Path, typer.Option(help="Where to write the OpenAPI document.")] = (
