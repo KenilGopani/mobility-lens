@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { getSummary } from '../api/client';
 import { Chart } from '../components/Chart';
@@ -73,6 +74,9 @@ export function OverviewPage() {
                 <>
                   <Confidence value={leader.confidence} />
                   <p className="small">Analyzed {date(leader.last_run_at)}</p>
+                  <Link className="button light" to={`/map?area=${leader.id}`}>
+                    Explore this area ↗
+                  </Link>
                 </>
               )}
             </article>
@@ -123,7 +127,7 @@ export function OverviewPage() {
             <article className="panel">
               <div className="panel-heading">
                 <h3>Behind the recommendation</h3>
-                <span className="small muted">Evidence & assumptions</span>
+                <Link to="/comparison">Compare the evidence ↗</Link>
               </div>
               <QueryState
                 pending={summary.isPending}
@@ -147,7 +151,8 @@ export function OverviewPage() {
                   <Warnings warnings={summary.data.warnings} />
                   <p className="muted small">
                     {summary.data.finding_counts.critical} critical findings ·{' '}
-                    {summary.data.finding_counts.warning} warnings.
+                    {summary.data.finding_counts.warning} warnings.{' '}
+                    <Link to={`/quality?area=${leader.id}`}>Review data quality</Link>
                   </p>
                   <p className="muted small">
                     Model: {summary.data.scoring_model?.name ?? 'Unavailable'}{' '}

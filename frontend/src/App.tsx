@@ -4,6 +4,7 @@ import { OverviewPage } from './pages/OverviewPage';
 import { ComparisonPage } from './pages/ComparisonPage';
 import { QualityPage } from './pages/QualityPage';
 import { WhatIfPage } from './pages/WhatIfPage';
+import { MapPage } from './pages/MapPage';
 import './styles.css';
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
@@ -33,6 +34,9 @@ export function AppRoutes() {
           <NavLink to="/what-if">
             <span aria-hidden="true">≋</span> What-if Analysis
           </NavLink>
+          <NavLink to="/map">
+            <span aria-hidden="true">⌖</span> Interactive Map
+          </NavLink>
         </nav>
         <div className="sidebar-footer">
           <span className="status-dot" /> Public data workspace<p>Bay Area · California</p>
@@ -51,6 +55,7 @@ export function AppRoutes() {
             <Route path="/comparison" element={<ComparisonPage />} />
             <Route path="/quality" element={<QualityPage />} />
             <Route path="/what-if" element={<WhatIfPage />} />
+            <Route path="/map" element={<MapPage />} />
             <Route path="*" element={<h2>Page not found</h2>} />
           </Routes>
         </main>
