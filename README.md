@@ -1,39 +1,159 @@
 # MobilityLens
 
-A geospatial decision-support platform for comparing mobility service areas using public road-network data, transparent weighted scores and visible data-quality limitations.
+**Choose where a mobility service should expand—and explain why.**
 
-**Status:** Phases 0–10 of the defined portfolio roadmap are implemented and locally validated. Geographic analysis uses real persisted OSM/Census snapshots; operational analytics is explicitly synthetic. See [logs.md](logs.md) for module commits and phase evidence.
+MobilityLens is a full-stack decision-support workspace for comparing candidate service areas. It turns public road-network data into geographic metrics, transparent rankings, and visible data-quality signals, so an analyst can inspect the evidence and challenge the assumptions behind a recommendation.
 
-![Executive overview using real public-data snapshots](docs/screenshots/overview.png)
+[Watch the demo](docs/demo.webm) · [Decision walkthrough](docs/decision-walkthrough.md) · [Architecture](docs/architecture.md) · [MIT license](LICENSE)
 
-[Recorded demo](docs/demo.webm) · [Map screenshot](docs/screenshots/map.png) · [Synthetic operations screenshot](docs/screenshots/operations.png) · [Decision walkthrough](docs/decision-walkthrough.md) · [Sample API responses](docs/sample-responses/)
+## The use case
 
-## Problem and audience
+Imagine an operations team choosing between **Foster City, Mountain View, and San Jose** for its next service area. A single score is not enough: the team needs to understand the street network, compare strengths and risks, identify incomplete data, and see whether different priorities change the answer.
 
-A mobility program manager or operations analyst needs to decide where a service should expand next, explain the ranking, challenge assumptions and see where evidence is weak. MobilityLens makes those inputs inspectable instead of offering an unexplained recommendation. It is a local portfolio/internal-tool example, not a validated forecast of fleet performance.
+MobilityLens brings that workflow into one interface:
 
-## Decision workflow
+1. **Find the leading candidate** under a documented scoring model.
+2. **Explore the geography** through a hexagonal H3 grid of local metrics.
+3. **Compare the evidence** side by side, including score contributions and confidence.
+4. **Challenge the priorities** with temporary scoring weights.
+5. **Review the limitations** before making an expansion decision.
 
-1. Compare candidate service areas: Foster City, Mountain View and San Jose.
-2. Inspect their H3 cells, metrics and low-confidence regions on the MapLibre map.
-3. Review score contributions, missing data, strengths, risks and source provenance.
-4. Adjust temporary weights to challenge the default ranking. All scoring stays in the backend.
+It is an analytical planning tool—not an autonomous-driving system or a validated forecast of service performance.
 
-The five MVP metrics are intersection density, road density, average node degree, network directness and road metadata completeness. Fixed reference ranges and weights are documented assumptions. Unavailable data remains unavailable; it is never silently replaced with zero. Confidence is a reliability signal, not a probability.
+## See the workspace
 
-## Local setup
+### Executive overview
 
-Requires Python 3.12, uv, Node.js 22+ and Docker with Compose. Run commands from the repository root unless a different directory is shown.
+The overview brings together candidate rankings, the leading area, analysis timestamps, and the metrics behind its score.
 
-Start PostGIS (host port 5433):
+![Executive overview showing real public-data rankings and score contributions](docs/screenshots/overview.png)
 
-```bash
-docker compose up -d db
+<details>
+<summary><strong>Interactive map — inspect local conditions</strong></summary>
+
+Select an area and metric, inspect individual H3 cells, and highlight low-confidence regions. Gray cells indicate unavailable values; amber outlines identify low confidence. Requests are limited to the current map viewport.
+
+![Interactive H3 map of Mountain View with confidence outlines and cell values](docs/screenshots/map.png)
+
+</details>
+
+<details>
+<summary><strong>Area comparison — understand the tradeoffs</strong></summary>
+
+Compare two or three areas using the same model. Review raw and normalized metrics, effective weights, score contributions, strengths, risks, and warnings.
+
+![Side-by-side area comparison with score contributions and metric values](docs/screenshots/comparison.png)
+
+</details>
+
+<details>
+<summary><strong>Operational analytics — explore clearly labeled simulations</strong></summary>
+
+A separate Operations page shows seeded, reproducible **synthetic** route and issue scenarios: completion rates, intervention rates, trip duration, issue severity, and resolution time. These are illustrative generated outcomes, not observed fleet performance, and never affect geographic rankings.
+
+![Operational analytics with a persistent synthetic-data banner, trends, and scenario provenance](docs/screenshots/operations.png)
+
+</details>
+
+| View                 | The question it answers                                                          |
+| -------------------- | -------------------------------------------------------------------------------- |
+| **Overview**         | Which candidate leads, and what supports its score?                              |
+| **Interactive Map**  | Where do network conditions and confidence vary within an area?                  |
+| **Comparison**       | How do two or three areas differ on the same metrics?                            |
+| **Data Quality**     | What is missing, unreliable, or worth reviewing in the source data?              |
+| **What-if Analysis** | Does the ranking change when our priorities change?                              |
+| **Operations**       | What would operational reporting look like using explicitly synthetic scenarios? |
+
+## How the scoring works
+
+The baseline model uses five road-network metrics:
+
+| Metric                | What it describes                                    | Weight |
+| --------------------- | ---------------------------------------------------- | ------ |
+| Intersection density  | Intersections per square kilometer                   | 25%    |
+| Road density          | Drivable road length per square kilometer            | 25%    |
+| Connectivity          | Average number of streets connected at a node        | 20%    |
+| Network directness    | Straight-line distance relative to road-path length  | 15%    |
+| Metadata completeness | Presence of road tags such as speed, lanes, and name | 15%    |
+
+Raw values are normalized against fixed reference ranges and combined into a **0–100 score**. Every result retains its component values, weights, contributions, and analysis-run reference.
+
+- **Missing is not zero.** Unavailable metrics stay unavailable; remaining weights are renormalized and confidence is reduced. Below 50% available weight, no score is returned.
+- **Assumptions stay visible.** Higher values are favored by the baseline model. Weights and reference ranges are documented choices, not objective measures of service feasibility.
+- **Confidence has limits.** It is a reliability signal, not a probability or a safety guarantee. Area confidence currently uses network sample size.
+- **What-if changes are temporary.** Sliders always total 100%; the backend recalculates the ranking without saving those weights.
+
+In the included public-data snapshots, Mountain View scores **52.68**, narrowly ahead of Foster City at **52.03**. Giving intersection density all the weight makes Foster City lead instead. That sensitivity is part of the decision, not something the interface hides. See the [worked example](docs/decision-walkthrough.md) and [scoring model](docs/scoring-model.md).
+
+## Architecture
+
+```mermaid
+flowchart TB
+    subgraph Batch[Offline analysis through the CLI]
+        Census[Census land boundaries] --> Pipeline[Geospatial pipeline]
+        OSM[OpenStreetMap road networks] --> Pipeline
+        Generator[Seeded synthetic generator] --> Simulation[Operational scenario pipeline]
+    end
+
+    Pipeline -->|Runs, H3 cells, metrics and quality findings| DB[(PostgreSQL + PostGIS)]
+    Simulation -->|Separate, explicitly synthetic tables| DB
+    Scoring[Pure normalization and scoring] --> Pipeline
+    Scoring --> API[FastAPI read API and temporary scoring preview]
+    DB --> API
+    API --> UI[React + TypeScript workspace]
+    UI --> Map[MapLibre geographic exploration]
+    UI --> Charts[Plotly analytical charts]
 ```
 
-Prepare the backend:
+**Batch processing** loads boundaries, downloads or reuses cached road networks, builds H3 cells, computes metrics, checks quality, and records a versioned analysis run. Failures roll back the run's data while retaining an error record.
+
+**The API** serves stored analysis results and calculates comparisons and temporary previews through one scoring implementation. HTTP requests never launch a city-wide OSM download.
+
+**The frontend** presents the decision workflow, fetches cells for the visible viewport, and makes missing values and provenance accessible. Synthetic operational records remain separate from geographic scores throughout the database, API, and UI.
+
+### Technology stack
+
+| Layer                 | Technologies                                                                          |
+| --------------------- | ------------------------------------------------------------------------------------- |
+| Geographic processing | Python 3.12, GeoPandas, Shapely, OSMnx, H3, NumPy, Pandas                             |
+| Backend and storage   | FastAPI, Pydantic, SQLAlchemy, Alembic, PostgreSQL/PostGIS, Typer                     |
+| Frontend              | React, TypeScript, Vite, TanStack Query, MapLibre GL, Plotly                          |
+| Verification          | pytest, Vitest, React Testing Library, Playwright, Ruff, MyPy, ESLint, GitHub Actions |
+
+## Explore the implementation
+
+```text
+backend/
+  app/          API, domain models, repositories, scoring and quality rules
+  pipelines/    Geographic ingestion and seeded synthetic generation
+  cli/          Seeding, analysis, simulation, recovery and diagnostics
+  migrations/   Versioned PostGIS/database schema
+  tests/        Unit, database integration and API contract tests
+frontend/
+  src/          Pages, shared components, API client and map layers
+  e2e/          Browser workflows and demo recording
+  tests/        Component tests and isolated browser fixtures
+docs/           Architecture, assumptions, examples, screenshots and demo
+```
+
+The implementation has been checked locally with **250 backend tests**, **16 frontend tests**, and **6 browser tests**, alongside lint, formatting, type checks, and a production build. See [logs.md](logs.md) for the implementation history and verification scope.
+
+For deeper reading: [data model](docs/data-model.md), [API contract](docs/api.md), [sample responses](docs/sample-responses/), [range review](docs/calibration.md), and [reliability/performance notes](docs/reliability.md).
+
+## Data and license
+
+The geographic examples use **OpenStreetMap contributors' data (ODbL)** and **US Census land-clipped boundaries**. Included geographic screenshots reflect stored analysis snapshots from **October 25, 2026**. Operational examples are generated, explicitly labeled synthetic data; no proprietary fleet data is used.
+
+The project source code is available under the **[MIT License](LICENSE)**, copyright **2026 Kenil Gopani**. Third-party datasets and dependencies retain their own licenses.
+
+## Quick local setup
+
+**Requires:** Python 3.12, [uv](https://docs.astral.sh/uv/), Node.js 22+, and Docker Desktop running. Start from the repository root.
+
+**1. Start the database and prepare the backend.**
 
 ```bash
+docker compose up -d --wait db
 cd backend
 cp ../.env.example .env
 uv sync --frozen
@@ -41,18 +161,13 @@ uv run alembic upgrade head
 uv run python -m cli seed-service-areas
 uv run python -m cli seed-metric-definitions
 uv run python -m cli seed-scoring-model
-```
-
-Generate real analysis results, then serve the API. Network fetching can take time; OSM responses are cached:
-
-```bash
-uv run python -m cli analyze-area foster-city
-uv run python -m cli analyze-area mountain-view
-uv run python -m cli analyze-area san-jose
+uv run python -m cli analyze-all
 uv run uvicorn app.main:app --reload
 ```
 
-In another terminal, prepare the frontend:
+The first analysis downloads public road data and can take several minutes; subsequent runs reuse cached responses.
+
+**2. In another terminal, start the frontend from the repository root.**
 
 ```bash
 cd frontend
@@ -61,140 +176,6 @@ npm ci
 npm run dev
 ```
 
-Open the printed `http://localhost:5173` URL. The default API is `http://localhost:8000`. Backend CORS allows `http://localhost:5173`; if using another host or port, set `CORS_ORIGINS` in `backend/.env` accordingly. Frontend configuration uses `VITE_API_BASE_URL` and `VITE_MAP_STYLE_URL`. The public demo basemap requires no access token and has external network dependencies.
+**3. Open [localhost:5173](http://localhost:5173).** API documentation is at [localhost:8000/docs](http://localhost:8000/docs).
 
-No API request starts an OSM download or writes what-if assumptions. Analysis runs are created only through the CLI.
-
-### Batch analysis and synthetic scenarios
-
-From `backend/`:
-
-```bash
-uv run python -m cli analyze-all
-# Resume only an unchanged, interrupted batch:
-uv run python -m cli analyze-all --resume
-# Optional, clearly synthetic operational examples:
-uv run python -m cli simulate-area foster-city --seed 42 --routes 500
-uv run python -m cli simulate-area mountain-view --seed 43 --routes 500
-uv run python -m cli simulate-area san-jose --seed 44 --routes 500
-```
-
-The Operations page shows simulated completion/intervention rates, completed-trip duration, daily trends, issue severity/status and resolution time. Each scenario records its seed, generator version and pinned geographic run; repeating the same inputs reuses it. Synthetic data never enters geographic scores.
-
-## Validation
-
-From `frontend/`:
-
-```bash
-npm run lint
-npm run format:check
-npm run typecheck
-npm test
-npm run build
-```
-
-From `backend/`:
-
-```bash
-uv run ruff check .
-uv run mypy app cli pipelines
-uv run pytest tests/unit --no-cov
-```
-
-Database integration/contract tests require a dedicated database whose name ends with `_test`. Tests reset its schema; never point them at your analysis database:
-
-```bash
-# From backend/, using the dedicated local test database:
-DATABASE_URL=postgresql+psycopg://mobility:mobility@localhost:5433/mobility_lens_test uv run pytest
-```
-
-The final local validation passed 250 backend tests, 16 frontend unit tests and 6 browser tests. Browser tests also pass in CI's isolated fixture mode. Remote CI has not been triggered by this local implementation.
-
-### Browser acceptance and demo capture
-
-For the real-data tests, start the API with the test origin allowlisted:
-
-```bash
-# From backend/ (stop another API process on port 8000 first):
-CORS_ORIGINS='["http://localhost:5173","http://127.0.0.1:5175"]' uv run uvicorn app.main:app --host 127.0.0.1 --port 8000
-```
-
-Then from `frontend/`:
-
-```bash
-npx playwright install chromium
-npm run test:e2e
-npm run demo:record
-```
-
-Playwright starts its own frontend on port 5175. The capture command writes screenshots and a short WebM walkthrough to `docs/`. Without a real API, use `E2E_FIXTURE=1 npm run test:e2e`; this starts an isolated, explicitly labeled fixture API on port 8011. Fixture mode is also wired into CI. Normal tests skip the opt-in recording test.
-
-### Reliability and performance
-
-Readiness is available at `/ready`, with generated request IDs and timing headers on API responses. From `backend/`:
-
-```bash
-uv run python -m cli benchmark-api ../docs/performance.json --samples 10
-uv run python -m cli calibration-report ../docs/calibration.md
-uv run python -m cli recover-stale-runs --older-than-hours 24
-```
-
-Stale-run recovery previews by default. Use `--apply` only after confirming the owning worker stopped. Details and measured query plans are in [reliability.md](docs/reliability.md). Recorded warm local p95s: summary 5 ms, comparison 4 ms, viewport 55 ms. Useful overview render during demo capture was 738 ms. These are local measurements, not production SLAs. npm audit reports zero vulnerabilities with the committed dependency override.
-
-## Isolated browser QA without PostGIS
-
-A test-only API fixture is available to verify UI workflows without downloading public data. Every metric and geometry it serves is synthetic test data. It uses the backend's pure scoring engine and cannot write analysis results.
-
-```bash
-# Terminal 1, repository root:
-backend/.venv/bin/python frontend/tests/browser_fixture.py
-
-# Terminal 2, frontend directory (macOS/Linux shell):
-VITE_API_BASE_URL=http://127.0.0.1:8011 npm run dev -- --host 127.0.0.1
-```
-
-Visit the preview URL. Fixture model/provenance/warnings identify the test data. Stop both processes after testing; run the frontend normally to return to the real API on port 8000. The fixture has no role in the production build.
-
-## Architecture and design
-
-```mermaid
-flowchart LR
-    Census[Census land boundaries] --> Pipeline[CLI geospatial pipeline]
-    OSM[OpenStreetMap networks] --> Pipeline
-    Pipeline --> DB[(PostgreSQL + PostGIS)]
-    DB --> API[FastAPI read API]
-    API --> UI[React + MapLibre + Plotly]
-    Generator[Seeded synthetic generator] --> Sim[CLI simulate-area]
-    DB --> Sim
-    Sim --> Synthetic[(Synthetic scenario tables)]
-    Synthetic --> API
-```
-
-**Stack:** Python 3.12, FastAPI, SQLAlchemy, Alembic, PostgreSQL/PostGIS, GeoPandas, Shapely, OSMnx, H3, React/TypeScript, TanStack Query, MapLibre, Plotly, Vitest and Playwright. The [standalone diagram source](docs/architecture.mmd) can be reused independently.
-
-| Document                                       | Purpose                                                              |
-| ---------------------------------------------- | -------------------------------------------------------------------- |
-| [logs.md](logs.md)                             | Completed modules, validation and next work                          |
-| [PLAN.md](PLAN.md)                             | Original phased roadmap                                              |
-| [docs/architecture.md](docs/architecture.md)   | Components and data flow                                             |
-| [docs/data-model.md](docs/data-model.md)       | Domain entities and spatial schema                                   |
-| [docs/scoring-model.md](docs/scoring-model.md) | Metrics, normalization, weights and confidence                       |
-| [docs/api.md](docs/api.md)                     | Implemented REST behavior                                            |
-| [docs/adr/](docs/adr/)                         | Architecture decisions; MapLibre supersedes the original Mapbox plan |
-
-## Data disclaimer
-
-Real analysis uses OpenStreetMap contributors (ODbL) and US Census land-clipped boundaries. Browser test fixtures are synthetic and explicitly labeled. Synthetic operational analytics are opt-in and always labeled in the database, API and UI. MobilityLens uses no proprietary fleet data and is not an autonomous-driving system.
-
-## Engineering tradeoffs and limits
-
-- Heavy ingestion runs offline; HTTP reads stay responsive. There is one pure scoring implementation for persisted and temporary scores.
-- Fixed normalization ranges avoid forcing extreme 0/1 values from a three-city peer set. Weights/ranges are documented assumptions; see [calibration.md](docs/calibration.md).
-- Missing values remain null; confidence reflects available weight and metric reliability. Current area confidence uses sample size and does not prove completeness or safety.
-- Viewport filtering, payload bounds and existing spatial indexes meet the measured scale. No additional cache, distributed processing, worker queue or speculative indexes were introduced.
-- MapLibre and Plotly are lazy vendor chunks; they exceed Vite's size advisory. Public basemap/fonts require external network access. Ordinary database/unit/CI browser data sources remain deterministic and offline.
-- The captured geographic snapshots are from 2026-10-25, not newly downloaded on the screenshot date. Synthetic outcomes are illustrative, not observed fleet results. No authentication or public deployment is included in the local MVP.
-
-## Future work
-
-The defined phases are delivered. Further work is optional: validate assumptions against real service outcomes if such evidence becomes available, refresh public snapshots, expand POI/accessibility analysis, profile larger/concurrent workloads and add authentication/rate limits before a public deployment. The PLAN's future-enhancement ideas are not requirements for this portfolio release.
+Optional: populate the Operations page by running `uv run python -m cli simulate-area foster-city --seed 42 --routes 500` from `backend/` in another terminal. This generates a clearly labeled synthetic scenario.

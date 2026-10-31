@@ -175,3 +175,10 @@ All defined phases 0–10 are implemented and locally validated for the portfoli
 ### Continuing from this release
 
 Use README for setup, `docs/reliability.md` for recovery/profiling and `docs/decision-walkthrough.md` for the demo narrative. Refresh public snapshots deliberately through the CLI; the captured geographic runs are from 2026-10-25. Geographic weights/ranges remain explicit assumptions, and simulated route outcomes are never evidence of real service performance. Local validation does not constitute production certification. If continuing with optional features or deployment, append a new dated module entry here and keep the same focused-commit convention and repository owner identity.
+
+### README and MIT license — 2026-10-31
+
+- Reworked the README around the expansion-planning use case, the six UI views, existing screenshots/demo, scoring assumptions and the batch/API/frontend architecture.
+- Added a concise implementation map and links to detailed documentation, with brief local setup instructions at the end.
+- Added the MIT source-code license with Kenil Gopani's copyright; retained the distinction between project licensing and third-party data/dependency licenses.
+- Validation: checked local documentation/image links, Markdown formatting, setup commands against the CLI, and the final diff. Documentation-only change; application tests were not rerun.
