@@ -5,7 +5,7 @@ import geopandas as gpd
 from shapely.geometry import Polygon, box
 from typer.testing import CliRunner
 
-from cli.__main__ import app
+from cli.__main__ import app, fetch_boundary_command
 from pipelines.boundaries import write_boundary
 
 
@@ -99,9 +99,8 @@ def test_osm_source_is_recorded(tmp_path: Path) -> None:
 
 
 def test_cli_fetch_boundary_defaults_to_census() -> None:
-    result = CliRunner().invoke(app, ["fetch-boundary", "--help"])
-    out = result.stdout + result.stderr
-    assert "--source" in out and "census" in out
+    assert fetch_boundary_command.__defaults__ is not None
+    assert fetch_boundary_command.__defaults__[0] == "census"
 
 
 def test_census_ambiguous_name_prefers_city_or_geoid(tmp_path: Path) -> None:
