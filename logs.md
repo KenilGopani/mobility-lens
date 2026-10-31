@@ -50,3 +50,9 @@ Backend implements domain/migrations, Census boundaries, cached OSM ingestion, H
 - Area/metric selection is shareable through URL parameters. Added accessible cell table, source/run timestamps, raw values and documented normalization assumptions.
 - Map/WebGL failures retain the usable cell table. Overview links now open geographic exploration and quality review.
 - Validation: frontend lint, strict typecheck, 12 tests and production build passed. Map test covers bounded queries, metric changes, zero values, selected cells and truncation. Browser review follows in the integration/handoff entry.
+
+### Map worker integration fix
+
+- Browser QA exposed a worker URL failure in MapLibre 6 when Vite prebundles the library. Added an explicit Vite-bundled module-worker URL so dev and production both include the worker and shared imports.
+- Verified rendered H3 cells, gray unavailable values, amber low-confidence outlines, area/metric changes and zoom controls in the browser.
+- Validation: lint, format check, strict typecheck, 15 tests and production build passed.

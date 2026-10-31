@@ -1,9 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import * as maplibregl from 'maplibre-gl';
+import workerUrl from 'maplibre-gl/dist/maplibre-gl-worker.mjs?worker&url';
 import type { Cells, Detail } from '../../api/types';
 import { number, percent } from '../../components/shared';
 import 'maplibre-gl/dist/maplibre-gl.css';
 const empty: GeoJSON.FeatureCollection = { type: 'FeatureCollection', features: [] };
+// Let Vite bundle the module worker and its shared imports for dev and production.
+maplibregl.setWorkerUrl(workerUrl);
 const layers = ['cell-fill', 'cell-outline', 'low-confidence', 'area-boundary'];
 export function AreaMap({
   detail,
