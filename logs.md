@@ -94,3 +94,12 @@ Phase 6 page implementation is complete. Its full live-data acceptance is **not 
 - API shapes and functions: `frontend/src/api/types.ts`, `frontend/src/api/client.ts`; match `docs/openapi.json` when changing contracts.
 - Map lifecycle/worker/layers: `frontend/src/features/map/AreaMap.tsx`. Pure weight redistribution: `frontend/src/features/scoring/weights.ts`.
 - Add a dated feature entry here with implementation, validation and limitations, then make one Conventional Commit for that module. Use the configured repository author/committer identity.
+
+## Full roadmap completion — 2026-10-31
+
+### Phase 7: Candidate verification and batch recovery
+
+- Started the existing PostGIS container and verified persisted real OSM/Census runs for all three cities. Latest results: Foster City 127 cells / 52.03 score; Mountain View 350 / 52.68; San Jose 4,865 / 44.13. These are existing 2026-10-25 snapshots, not newly fetched observations.
+- Full pre-change backend verification passed: 236 tests, Ruff and strict MyPy. All database/contract tests used the dedicated `_test` database.
+- Added `analyze-all` with failure isolation and explicit `--resume` batch recovery. Recovery skips a successful run only at the current pipeline version and configured H3 resolution; omit resume after input/config changes or when a fresh snapshot is required.
+- Validation: Ruff, strict MyPy and two new batch tests passed; `analyze-all --resume` correctly skipped all three compatible successful runs.

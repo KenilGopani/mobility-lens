@@ -137,6 +137,36 @@ def analyze_area_command(
     typer.echo(f"  score: {score} (confidence {confidence:.2f}), findings: {summary.findings}")
 
 
+@app.command("analyze-all")
+def analyze_all_command(
+    resume: Annotated[
+        bool,
+        typer.Option(help="Skip compatible successes when resuming an unchanged batch."),
+    ] = False,
+) -> None:
+    """Analyze every seeded area; continue after individual failures and report all results."""
+    from pipelines.batch import analyze_all
+
+    configure_logging(get_settings().log_level)
+    with _session() as session:
+        try:
+            result = analyze_all(session, resume=resume)
+        except ValueError as exc:
+            typer.echo(str(exc), err=True)
+            raise typer.Exit(code=2) from exc
+    for summary in result.succeeded:
+        typer.echo(
+            f"succeeded: {summary.service_area_id} "
+            f"run={summary.analysis_run_id} score={summary.score}"
+        )
+    for slug in result.skipped:
+        typer.echo(f"skipped: {slug} (successful run already available)")
+    for slug, error in result.failed.items():
+        typer.echo(f"failed: {slug}: {error}", err=True)
+    if result.failed:
+        raise typer.Exit(code=1)
+
+
 @app.command("export-openapi")
 def export_openapi(
     output: Annotated[Path, typer.Option(help="Where to write the OpenAPI document.")] = (
