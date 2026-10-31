@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { OverviewPage } from './pages/OverviewPage';
 import { ComparisonPage } from './pages/ComparisonPage';
+import { QualityPage } from './pages/QualityPage';
 import './styles.css';
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
@@ -25,6 +26,9 @@ export function AppRoutes() {
           <NavLink to="/comparison">
             <span aria-hidden="true">▥</span> Comparison
           </NavLink>
+          <NavLink to="/quality">
+            <span aria-hidden="true">◈</span> Data Quality
+          </NavLink>
         </nav>
         <div className="sidebar-footer">
           <span className="status-dot" /> Public data workspace<p>Bay Area · California</p>
@@ -41,6 +45,7 @@ export function AppRoutes() {
           <Routes>
             <Route path="/" element={<OverviewPage />} />
             <Route path="/comparison" element={<ComparisonPage />} />
+            <Route path="/quality" element={<QualityPage />} />
             <Route path="*" element={<h2>Page not found</h2>} />
           </Routes>
         </main>

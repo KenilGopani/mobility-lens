@@ -28,3 +28,10 @@ Backend implements domain/migrations, Census boundaries, cached OSM ingestion, H
 - Shared results show Plotly score contributions, raw/normalized metrics, effective weights, confidence, selected-set ranks, timestamps, strengths, risks and peer-outlier warnings.
 - Charts preserve null gaps and reject non-finite numbers; tables retain exact unavailable states.
 - Validation: frontend lint, strict typecheck and 8 tests passed, including selection constraints, zero scores, null metrics and confidence state.
+
+### Feature 3: Data quality and provenance
+
+- Added area selection via shareable URL, severity filtering, persisted findings, missing-value counts/shares and low-confidence cell summaries.
+- Shows analysis/run metadata, boundary source and full public source provenance, plus the distinction between tag completeness and geographic coverage.
+- Added configurable chart axis labels for completeness counts.
+- Validation: frontend lint, strict typecheck and 9 tests passed; quality interaction covers severity filtering, provenance and unavailable shares for an empty grid.

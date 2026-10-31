@@ -5,10 +5,12 @@ export function Chart({
   data,
   title,
   stacked = false,
+  axisLabel = 'Score points',
 }: {
   data: Data[];
   title: string;
   stacked?: boolean;
+  axisLabel?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [failed, setFailed] = useState(false);
@@ -28,7 +30,7 @@ export function Chart({
           plot_bgcolor: 'transparent',
           font: { family: 'Arial, sans-serif', color: '#52605c' },
           barmode: stacked ? 'stack' : 'group',
-          yaxis: { title: { text: 'Score points' }, gridcolor: '#e6ebe7', rangemode: 'tozero' },
+          yaxis: { title: { text: axisLabel }, gridcolor: '#e6ebe7', rangemode: 'tozero' },
           legend: { orientation: 'h' },
         };
         dispose = () => Plotly.purge(target);
@@ -46,7 +48,7 @@ export function Chart({
       resize.disconnect();
       dispose?.();
     };
-  }, [data, stacked]);
+  }, [data, stacked, axisLabel]);
   return (
     <div className="chart" role="img" aria-label={title}>
       {failed ? (
