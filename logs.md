@@ -118,3 +118,10 @@ Phase 6 page implementation is complete. Its full live-data acceptance is **not 
 - Added paginated scenario listing and per-area operational summaries with daily UTC series, completion/intervention rates, completed-trip duration, severity/status counts and resolution hours. Responses explicitly set `synthetic: true`.
 - Migration review excluded extension-owned tables from autogeneration; the reviewed migration only creates the three application tables. No PostGIS/Tiger extension tables are altered.
 - Validation: full backend suite **247 passed**, Ruff formatting/lint and strict MyPy passed; includes migration upgrade/downgrade, reproducibility, duplicate prevention, synthetic-only constraints, aggregate math and HTTP contract tests.
+
+### Phase 8 module 2: Operational analytics dashboard
+
+- Added a separate Operations page with persistent synthetic-only labeling, area/scenario selection, completion and intervention rates, trip duration, severity counts, resolution time, daily trend/table and pinned-run/seed provenance.
+- Geographic scoring remains server-owned and unchanged; a simulation is never described as observed performance.
+- Expanded isolated CI fixtures and browser acceptance to cover the dashboard. Generated 500-event scenarios for each existing city analysis via the new CLI, using seeds 42/43/44.
+- Validation: frontend lint, strict typecheck, **16 unit tests**, production build and **6 real-API browser tests** passed (the original six flows plus operations; area/metric flows share a test).

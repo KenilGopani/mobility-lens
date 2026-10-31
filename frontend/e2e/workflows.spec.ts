@@ -62,3 +62,20 @@ test('E2E-006: quality exposes warnings, missing values and provenance', async (
     ).toBeVisible();
   else await expect(page.getByRole('heading', { name: 'Data Quality', exact: true })).toBeVisible();
 });
+
+test('synthetic operations keeps labeling and scenario provenance visible', async ({ page }) => {
+  await page.goto('/operations');
+  await expect(page.getByRole('note')).toContainText('Synthetic data · simulation only');
+  await expect(
+    page.getByRole('heading', { name: 'Scenario provenance', exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('heading', { name: 'Simulated daily completion', exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole('combobox', { name: 'Service area', exact: true })
+    .selectOption({ label: 'Mountain View' });
+  await expect(
+    page.getByRole('heading', { name: 'Scenario provenance', exact: true }),
+  ).toBeVisible();
+});
