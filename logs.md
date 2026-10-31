@@ -21,3 +21,10 @@ Backend implements domain/migrations, Census boundaries, cached OSM ingestion, H
 - Scores stay server-owned; absent metrics display `Unavailable`, including a fully unscored candidate set.
 - Validation: frontend lint, strict typecheck, 7 tests and production build passed. Plotly is lazy-loaded; its vendor chunk exceeds the default size advisory.
 - Next: implement comparison, quality, temporary weights and geographic exploration.
+
+### Feature 2: Area comparison
+
+- Added selection of two or three candidates, backed by `/comparisons` and isolated query keys.
+- Shared results show Plotly score contributions, raw/normalized metrics, effective weights, confidence, selected-set ranks, timestamps, strengths, risks and peer-outlier warnings.
+- Charts preserve null gaps and reject non-finite numbers; tables retain exact unavailable states.
+- Validation: frontend lint, strict typecheck and 8 tests passed, including selection constraints, zero scores, null metrics and confidence state.
