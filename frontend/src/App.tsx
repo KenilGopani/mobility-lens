@@ -1,32 +1,52 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { OverviewPage } from './pages/OverviewPage';
-
+import './styles.css';
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
 });
-
 export function AppRoutes() {
   return (
-    <div>
-      <header>
+    <div className="app-shell">
+      <a className="skip-link" href="#main-content">
+        Skip to content
+      </a>
+      <aside className="sidebar">
+        <span className="brand-mark" aria-hidden="true">
+          M↗
+        </span>
         <h1>MobilityLens</h1>
+        <p className="sidebar-caption">EXPANSION INTELLIGENCE</p>
         <nav aria-label="Primary">
           <NavLink to="/" end>
-            Overview
+            <span aria-hidden="true">◫</span> Overview
           </NavLink>
         </nav>
-      </header>
-      <main>
-        <Routes>
-          <Route path="/" element={<OverviewPage />} />
-          <Route path="*" element={<h2>Page not found</h2>} />
-        </Routes>
-      </main>
+        <div className="sidebar-footer">
+          <span className="status-dot" /> Public data workspace<p>Bay Area · California</p>
+        </div>
+      </aside>
+      <div className="workspace">
+        <header className="topbar">
+          <span>
+            Workspace <span className="muted">/ Service area planning</span>
+          </span>
+          <span className="badge neutral">PUBLIC DATA</span>
+        </header>
+        <main id="main-content">
+          <Routes>
+            <Route path="/" element={<OverviewPage />} />
+            <Route path="*" element={<h2>Page not found</h2>} />
+          </Routes>
+        </main>
+        <footer className="page-footer">
+          OpenStreetMap contributors · Census boundaries{' '}
+          <span>Transparent assumptions. Traceable decisions.</span>
+        </footer>
+      </div>
     </div>
   );
 }
-
 export function App() {
   return (
     <QueryClientProvider client={queryClient}>
