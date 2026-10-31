@@ -35,3 +35,10 @@ Backend implements domain/migrations, Census boundaries, cached OSM ingestion, H
 - Shows analysis/run metadata, boundary source and full public source provenance, plus the distinction between tag completeness and geographic coverage.
 - Added configurable chart axis labels for completeness counts.
 - Validation: frontend lint, strict typecheck and 9 tests passed; quality interaction covers severity filtering, provenance and unavailable shares for an empty grid.
+
+### Feature 4: Temporary what-if scoring
+
+- Added model-backed weight sliders, one-to-three area selection, 300 ms debounced/cancellable server previews and one-click baseline restoration.
+- Weight redistribution uses integer basis points and largest remainders so weights stay nonnegative and total exactly 100% to API tolerance, including 100%/0% edge cases.
+- Outdated results are hidden during updates; temporary assumptions are visibly labeled and never persisted.
+- Validation: frontend lint, strict typecheck and 11 tests passed. Tests cover repeated redistribution, 100%/0% boundaries, preview payloads, visible score changes and restoration.

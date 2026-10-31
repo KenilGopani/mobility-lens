@@ -3,6 +3,7 @@ import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom';
 import { OverviewPage } from './pages/OverviewPage';
 import { ComparisonPage } from './pages/ComparisonPage';
 import { QualityPage } from './pages/QualityPage';
+import { WhatIfPage } from './pages/WhatIfPage';
 import './styles.css';
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } },
@@ -29,6 +30,9 @@ export function AppRoutes() {
           <NavLink to="/quality">
             <span aria-hidden="true">◈</span> Data Quality
           </NavLink>
+          <NavLink to="/what-if">
+            <span aria-hidden="true">≋</span> What-if Analysis
+          </NavLink>
         </nav>
         <div className="sidebar-footer">
           <span className="status-dot" /> Public data workspace<p>Bay Area · California</p>
@@ -46,6 +50,7 @@ export function AppRoutes() {
             <Route path="/" element={<OverviewPage />} />
             <Route path="/comparison" element={<ComparisonPage />} />
             <Route path="/quality" element={<QualityPage />} />
+            <Route path="/what-if" element={<WhatIfPage />} />
             <Route path="*" element={<h2>Page not found</h2>} />
           </Routes>
         </main>
